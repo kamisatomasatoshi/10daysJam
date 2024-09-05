@@ -1,7 +1,7 @@
 #include "MapChip.h"
 #include "DxLib.h"
 
-// コンストラクタでマップデータを初期化
+// コンストラクタでマップデータを初期化し、テクスチャを読み込む
 MapChip::MapChip() {
     // サンプルのマップデータ（0:空、1:ブロック）
     map = {
@@ -11,14 +11,45 @@ MapChip::MapChip() {
         {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
     };
+
+    // テクスチャを読み込む
+    LoadTextures();
+}
+
+// デストラクタでテクスチャを解放する
+MapChip::~MapChip() {
+    UnloadTextures();
+}
+
+// テクスチャを読み込む
+void MapChip::LoadTextures() {
+    blockTexture = LoadGraph("block.png"); // ブロックのテクスチャ（1の値に対応）
+    emptyTexture = LoadGraph("empty.png"); // 空のテクスチャ（0の値に対応）
+
+    // テクスチャ読み込み失敗チェック
+    if (blockTexture == -1 || emptyTexture == -1) {
+        printfDx("テクスチャの読み込みに失敗しました。\n");
+    }
+}
+
+// テクスチャを解放する
+void MapChip::UnloadTextures() {
+    DeleteGraph(blockTexture);
+    DeleteGraph(emptyTexture);
 }
 
 // マップチップの描画
 void MapChip::Draw() {
     for (int y = 0; y < map.size(); ++y) {
         for (int x = 0; x < map[y].size(); ++x) {
+            int drawX = x * CHIP_SIZE;
+            int drawY = y * CHIP_SIZE;
+
             if (map[y][x] == 1) {
-                DrawBox(x * CHIP_SIZE, y * CHIP_SIZE, (x + 1) * CHIP_SIZE, (y + 1) * CHIP_SIZE, GetColor(255, 255, 255), TRUE);
+                DrawGraph(drawX, drawY, blockTexture, TRUE); // ブロックテクスチャを描画
+            }
+            else {
+                DrawGraph(drawX, drawY, emptyTexture, TRUE); // 空テクスチャを描画
             }
         }
     }

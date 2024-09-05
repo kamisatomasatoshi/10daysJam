@@ -10,6 +10,7 @@ public:
     static const int MAP_HEIGHT = 15; // マップの縦サイズ
 
     MapChip();  // コンストラクタ
+    ~MapChip(); // デストラクタ
 
     // マップチップの描画
     void Draw();
@@ -19,6 +20,13 @@ public:
 
 private:
     std::vector<std::vector<int>> map;  // マップデータ
+    int blockTexture; // ブロックのテクスチャ
+    int emptyTexture; // 空のテクスチャ
+
+    // テクスチャを読み込む
+    void LoadTextures();
+    // テクスチャを解放する
+    void UnloadTextures();
 };
 
 #endif // MAPCHIP_H
