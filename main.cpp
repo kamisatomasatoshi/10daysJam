@@ -1,8 +1,9 @@
 ﻿#include "DxLib.h"
 #include "MapChip.h"
+#include "Player.h"
 
 // ウィンドウのタイトルに表示する文字列
-const TCHAR TITLE[] = "タイトル";
+const TCHAR TITLE[] = "落ちるんデス";
 
 // ウィンドウ横幅
 const int WIN_WIDTH = 600;
@@ -47,6 +48,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// 画像などのリソースデータの変数宣言と読み込み
 	MapChip* mapChip = new MapChip();
+	Player* player = new Player(128,0, mapChip);
 
 	// ゲームループで使う変数の宣言
 
@@ -73,10 +75,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case Scene::Title:
 			
 			break;
-
-
 		case Scene::Game:
-			
+			player->Update();
 			break;
 		default:
 
@@ -84,6 +84,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		// 描画処理
+		player->Draw();
 		mapChip->Draw();
 
 		//---------  ここまでにプログラムを記述  ---------//
@@ -103,6 +104,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 		}
 	}
+	delete player;
 	delete mapChip;
 	// Dxライブラリ終了処理
 	DxLib_End();

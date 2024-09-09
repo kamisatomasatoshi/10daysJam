@@ -27,8 +27,8 @@ void MapChip::SetMapNo(int MapNo_)
 
 // テクスチャを読み込む
 void MapChip::LoadTextures() {
-	blockTexture = LoadGraph("Resorce/blockTexture.png"); // ブロックのテクスチャ（1の値に対応）
-	emptyTexture = LoadGraph("Resorce/emptyTexture.png"); // 空のテクスチャ（0の値に対応）
+	blockTexture = LoadGraph("Resource/blockTexture.png"); // ブロックのテクスチャ（1の値に対応）
+	emptyTexture = LoadGraph("Resource/emptyTexture.png"); // 空のテクスチャ（0の値に対応）
 
 	// テクスチャ読み込み失敗チェック
 	if (blockTexture == -1 || emptyTexture == -1) {
