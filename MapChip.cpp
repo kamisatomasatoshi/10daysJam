@@ -2,7 +2,6 @@
 
 // コンストラクタでマップデータを初期化し、テクスチャを読み込む
 MapChip::MapChip() {
-	SetMapNo(0);
 
 	// テクスチャを読み込む
 	LoadTextures();
@@ -53,16 +52,16 @@ void MapChip::Draw() {
 	int j, i;
 
 	// 描画するマップチップの数をセット
-	DrawMapChipNumX = 640 / CHIP_SIZE + 2;
-	DrawMapChipNumY = 480 / CHIP_SIZE + 2;
+	DrawMapChipNumX = 640;
+	DrawMapChipNumY = 480;
 
 	// 画面左上に描画するマップ座標をセット
 	MapDrawPointX = 0;
 	MapDrawPointY = 0;
 
 	// マップを描く
-	for (i = -1; i < DrawMapChipNumY; i++) {
-		for (j = -1; j < DrawMapChipNumX; j++) {
+	for (i = 0; i < DrawMapChipNumY; i++) {
+		for (j = 0; j < DrawMapChipNumX; j++) {
 			if ((j + MapDrawPointX < 0) || (i + MapDrawPointY < 0) ||
 				(j + MapDrawPointX >= MapData[MapNo].Width) || (i + MapDrawPointY >= MapData[MapNo].Height)) {
 				continue;
