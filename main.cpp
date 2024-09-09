@@ -1,4 +1,5 @@
 ﻿#include "DxLib.h"
+#include "MapChip.h"
 
 // ウィンドウのタイトルに表示する文字列
 const TCHAR TITLE[] = "タイトル";
@@ -45,7 +46,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	// 画像などのリソースデータの変数宣言と読み込み
-
+	MapChip* mapChip = new MapChip();
 
 	// ゲームループで使う変数の宣言
 
@@ -83,6 +84,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		// 描画処理
+		mapChip->Draw();
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
@@ -101,6 +103,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 		}
 	}
+	delete mapChip;
 	// Dxライブラリ終了処理
 	DxLib_End();
 
