@@ -1,68 +1,95 @@
 #include "MapChip.h"
-#include "DxLib.h"
 
 // コンストラクタでマップデータを初期化し、テクスチャを読み込む
 MapChip::MapChip() {
-    // サンプルのマップデータ（0:空、1:ブロック）
-    map = {
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-    };
+	SetMapNo(0);
 
-    // テクスチャを読み込む
-    LoadTextures();
+	// テクスチャを読み込む
+	LoadTextures();
+
+	// 描画用の初期値設定
+	MapDrawPointX = 0;
+	MapDrawPointY = 0;
 }
 
 // デストラクタでテクスチャを解放する
 MapChip::~MapChip() {
-    UnloadTextures();
+	UnloadTextures();
+}
+
+void MapChip::SetMapNo(int MapNo_)
+{
+	if (MapNo < 0 || MapNo >= MAP_NUM) {
+		printfDx("エラー: 不正なマップ番号 %d が指定されました。\n", MapNo);
+		return;
+	}
+	MapNo = MapNo_;
 }
 
 // テクスチャを読み込む
 void MapChip::LoadTextures() {
-    blockTexture = LoadGraph("block.png"); // ブロックのテクスチャ（1の値に対応）
-    emptyTexture = LoadGraph("empty.png"); // 空のテクスチャ（0の値に対応）
+	blockTexture = LoadGraph("Resorce/blockTexture.png"); // ブロックのテクスチャ（1の値に対応）
+	emptyTexture = LoadGraph("Resorce/emptyTexture.png"); // 空のテクスチャ（0の値に対応）
 
-    // テクスチャ読み込み失敗チェック
-    if (blockTexture == -1 || emptyTexture == -1) {
-        printfDx("テクスチャの読み込みに失敗しました。\n");
-    }
+	// テクスチャ読み込み失敗チェック
+	if (blockTexture == -1 || emptyTexture == -1) {
+		printfDx("テクスチャの読み込みに失敗しました。\n");
+	}
 }
 
 // テクスチャを解放する
 void MapChip::UnloadTextures() {
-    DeleteGraph(blockTexture);
-    DeleteGraph(emptyTexture);
+	DeleteGraph(blockTexture);
+	DeleteGraph(emptyTexture);
 }
 
 // マップチップの描画
 void MapChip::Draw() {
-    for (int y = 0; y < map.size(); ++y) {
-        for (int x = 0; x < map[y].size(); ++x) {
-            int drawX = x * CHIP_SIZE;
-            int drawY = y * CHIP_SIZE;
+	if (MapNo < 0 || MapNo >= MAP_NUM) {
+		printfDx("エラー: 無効なマップ番号 %d が指定されています。\n", MapNo);
+		return;
+	}
 
-            if (map[y][x] == 1) {
-                DrawGraph(drawX, drawY, blockTexture, TRUE); // ブロックテクスチャを描画
-            }
-            else {
-                DrawGraph(drawX, drawY, emptyTexture, TRUE); // 空テクスチャを描画
-            }
-        }
-    }
+	int j, i;
+
+	// 描画するマップチップの数をセット
+	DrawMapChipNumX = 640 / CHIP_SIZE + 2;
+	DrawMapChipNumY = 480 / CHIP_SIZE + 2;
+
+	// 画面左上に描画するマップ座標をセット
+	MapDrawPointX = 0;
+	MapDrawPointY = 0;
+
+	// マップを描く
+	for (i = -1; i < DrawMapChipNumY; i++) {
+		for (j = -1; j < DrawMapChipNumX; j++) {
+			if ((j + MapDrawPointX < 0) || (i + MapDrawPointY < 0) ||
+				(j + MapDrawPointX >= MapData[MapNo].Width) || (i + MapDrawPointY >= MapData[MapNo].Height)) {
+				continue;
+			}
+
+			// マップデータが0だったら空テクスチャを描画
+			if (MapData[MapNo].Data[i + MapDrawPointY][j + MapDrawPointX] == 0) {
+				DrawGraph(j * CHIP_SIZE, i * CHIP_SIZE, emptyTexture, TRUE);
+			}
+			// マップデータが1だったらブロックテクスチャを描画
+			else if (MapData[MapNo].Data[i + MapDrawPointY][j + MapDrawPointX] == 1) {
+				DrawGraph(j * CHIP_SIZE, i * CHIP_SIZE, blockTexture, TRUE);
+			}
+		}
+	}
 }
 
 // 指定位置の当たり判定
 bool MapChip::IsHit(int x, int y) {
-    int mapX = x / CHIP_SIZE;
-    int mapY = y / CHIP_SIZE;
+	int mapX = x / CHIP_SIZE;
+	int mapY = y / CHIP_SIZE;
 
-    if (mapX < 0 || mapX >= MAP_WIDTH || mapY < 0 || mapY >= MAP_HEIGHT) {
-        return true; // 範囲外は当たりとする
-    }
+	// 範囲外を当たりとする
+	if (mapX < 0 || mapX >= MAP_WIDTH || mapY < 0 || mapY >= MAP_HEIGHT) {
+		return true;
+	}
 
-    return map[mapY][mapX] == 1; // 1なら当たり判定
+	// マップデータが1なら当たり判定
+	return MapData[MapNo].Data[mapY][mapX] == 1;
 }

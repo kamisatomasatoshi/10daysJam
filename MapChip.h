@@ -1,32 +1,61 @@
-#ifndef MAPCHIP_H
-#define MAPCHIP_H
+#pragma once
 
-#include <vector>
+#include "DxLib.h"
+
+#define MAP_NUM 1 // マップ数
+#define MAP_WIDTH  40 // マップの横サイズ
+#define MAP_HEIGHT 40 // マップの縦サイズ
 
 class MapChip {
 public:
-    static const int CHIP_SIZE = 32;  // マップチップの1つのサイズ
-    static const int MAP_WIDTH = 20;  // マップの横サイズ
-    static const int MAP_HEIGHT = 15; // マップの縦サイズ
+	static const int CHIP_SIZE = 32; // マップチップの1つのサイズ
 
-    MapChip();  // コンストラクタ
-    ~MapChip(); // デストラクタ
+	MapChip();  // コンストラクタ
+	~MapChip(); // デストラクタ
 
-    // マップチップの描画
-    void Draw();
+	// マップチップの描画
+	void Draw();
 
-    // 指定位置の当たり判定
-    bool IsHit(int x, int y);
+	// 指定位置の当たり判定
+	bool IsHit(int x, int y);
+
+	int GetMapNo() { return MapNo; }
+	void SetMapNo(int MapNo_);
 
 private:
-    std::vector<std::vector<int>> map;  // マップデータ
-    int blockTexture; // ブロックのテクスチャ
-    int emptyTexture; // 空のテクスチャ
+	int blockTexture; // ブロックのテクスチャ
+	int emptyTexture; // 空のテクスチャ
+	int MapNo = 0; // 現在のマップ番号
+	int MapDrawPointX, MapDrawPointY;     // 描画するマップ座標値
+	int DrawMapChipNumX, DrawMapChipNumY; // 描画するマップチップの数
 
-    // テクスチャを読み込む
-    void LoadTextures();
-    // テクスチャを解放する
-    void UnloadTextures();
+	// テクスチャを読み込む
+	void LoadTextures();
+	// テクスチャを解放する
+	void UnloadTextures();
+
+	// マップの構造体
+	struct MAPDATA {
+		int Width;  // マップの幅
+		int Height; // マップの高さ
+		int Data[MAP_HEIGHT][MAP_WIDTH]; // マップのデータ（0:空、1:ブロック）
+	};
+
+	MAPDATA MapData[MAP_NUM] = {
+		// サンプルのマップデータ
+		{
+			20, 20, {
+				{1, 0, 0, 0, 0, 0, 0, 1},
+				{1, 0, 0, 0, 0, 0, 0, 1},
+				{1, 0, 0, 0, 0, 0, 0, 1},
+				{1, 0, 0, 0, 0, 0, 0, 1},
+				{1, 1, 1, 0, 0, 0, 0, 1},
+				{1, 0, 0, 0, 0, 0, 0, 1},
+				{1, 0, 0, 0, 0, 0, 0, 1},
+				{1, 0, 0, 0, 0, 0, 0, 1},
+				{1, 0, 0, 0, 0, 0, 0, 1},
+				{1, 1, 1, 1, 1, 0, 0, 1}
+			}
+		},
+	};
 };
-
-#endif // MAPCHIP_H
