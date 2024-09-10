@@ -14,7 +14,7 @@ Player::~Player() {
 
 // テクスチャを読み込む
 void Player::LoadTexture() {
-    texture = LoadGraph("player.png"); // プレイヤーのテクスチャ
+    texture = LoadGraph("slime.png"); // プレイヤーのテクスチャ
     if (texture == -1) {
         printfDx("プレイヤーのテクスチャの読み込みに失敗しました。\n");
     }
