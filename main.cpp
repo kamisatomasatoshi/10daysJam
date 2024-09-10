@@ -11,13 +11,11 @@ const int WIN_WIDTH = 600;
 // ウィンドウ縦幅
 const int WIN_HEIGHT = 800;
 
-enum class Scene
+enum Scene
 {
 	Title,//タイトル
 	Game,//ステージ
 };
-
-Scene scene_ = Scene::Title;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
 	_In_ int nCmdShow) {
@@ -48,7 +46,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// 画像などのリソースデータの変数宣言と読み込み
 	MapChip* mapChip = new MapChip();
-	Player* player = new Player(128,0, mapChip);
+	Player* player = new Player(128, 0, mapChip);
+	int scene_ = Scene::Title;
 
 	// ゲームループで使う変数の宣言
 
@@ -71,9 +70,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		// 更新処理
 		switch (scene_)
-		{	
+		{
 		case Scene::Title:
-			
+			if (keys[KEY_INPUT_RETURN] == 1) {
+				scene_ = Scene::Game;
+			}
 			break;
 		case Scene::Game:
 			player->Update();
@@ -84,8 +85,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		// 描画処理
-		player->Draw();
-		mapChip->Draw();
+		DrawFormatString(0, 0, GetColor(255, 255, 255), "SceneNo%d", scene_);
+		if (scene_ == Scene::Game) {
+			player->Draw();
+			mapChip->Draw();
+
+		}
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
