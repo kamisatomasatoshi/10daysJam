@@ -1,40 +1,42 @@
 #include "Player.h"
 #include "DxLib.h"
 
-// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 Player::Player(int startX, int startY, MapChip* map)
     : x(startX), y(startY), vx(0), vy(0), jumpsLeft(MAX_JUMPS), jumpCooldown(0), isOnGround(false), map(map) {
-    LoadTexture(); // ƒvƒŒƒCƒ„[‚ÌƒeƒNƒXƒ`ƒƒ‚ð“Ç‚Ýž‚Þ
+    LoadTexture(); // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’èª­ã¿è¾¼ã‚€
 }
 
-// ƒfƒXƒgƒ‰ƒNƒ^
+// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 Player::~Player() {
-    UnloadTexture(); // ƒvƒŒƒCƒ„[‚ÌƒeƒNƒXƒ`ƒƒ‚ð‰ð•ú
+    UnloadTexture(); // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’è§£æ”¾
 }
 
-// ƒeƒNƒXƒ`ƒƒ‚ð“Ç‚Ýž‚Þ
+// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’èª­ã¿è¾¼ã‚€
 void Player::LoadTexture() {
-    texture = LoadGraph("slime.png"); // ƒvƒŒƒCƒ„[‚ÌƒeƒNƒXƒ`ƒƒ
+
+    texture = LoadGraph("slime.png"); // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£
+
     if (texture == -1) {
-        printfDx("ƒvƒŒƒCƒ„[‚ÌƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚Ýž‚Ý‚ÉŽ¸”s‚µ‚Ü‚µ‚½B\n");
+        printfDx("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n");
     }
 }
 
-// ƒeƒNƒXƒ`ƒƒ‚ð‰ð•ú‚·‚é
+// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’è§£æ”¾ã™ã‚‹
 void Player::UnloadTexture() {
     DeleteGraph(texture);
 }
 
-// ƒvƒŒƒCƒ„[‚Ì•`‰æ
+// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æç”»
 void Player::Draw() {
     DrawGraph(x, y, texture, TRUE);
 }
 
-// ƒvƒŒƒCƒ„[‚ÌXViˆÚ“®AƒWƒƒƒ“ƒvA—Ž‰ºj
+// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ›´æ–°ï¼ˆç§»å‹•ã€ã‚¸ãƒ£ãƒ³ãƒ—ã€è½ä¸‹ï¼‰
 void Player::Update() {
     int nextX = x, nextY = y;
 
-    // …•½•ûŒü‚ÌˆÚ“®
+    // æ°´å¹³æ–¹å‘ã®ç§»å‹•
     if (CheckHitKey(KEY_INPUT_A)) {
         nextX -= MOVE_SPEED;
     }
@@ -42,70 +44,70 @@ void Player::Update() {
         nextX += MOVE_SPEED;
     }
 
-    // ƒWƒƒƒ“ƒviWƒL[j
+    // ã‚¸ãƒ£ãƒ³ãƒ—ï¼ˆWã‚­ãƒ¼ï¼‰
     if (CheckHitKey(KEY_INPUT_W) && jumpsLeft > 0 && jumpCooldown == 0) {
-        vy = JUMP_POWER;  // ƒWƒƒƒ“ƒv—Í‚ð—^‚¦‚é
-        jumpsLeft--;      // ƒWƒƒƒ“ƒv‰ñ”‚ðŒ¸‚ç‚·
-        jumpCooldown = JUMP_COOLDOWN;  // ƒN[ƒ‹ƒ^ƒCƒ€‚ðƒŠƒZƒbƒg
+        vy = JUMP_POWER;  // ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’ä¸Žãˆã‚‹
+        jumpsLeft--;      // ã‚¸ãƒ£ãƒ³ãƒ—å›žæ•°ã‚’æ¸›ã‚‰ã™
+        jumpCooldown = JUMP_COOLDOWN;  // ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ ã‚’ãƒªã‚»ãƒƒãƒˆ
     }
 
-    // ƒN[ƒ‹ƒ^ƒCƒ€‚Ìˆ—
+    // ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ ã®å‡¦ç†
     if (jumpCooldown > 0) {
         jumpCooldown--;
     }
 
-    // d—Í‚É‚æ‚é—Ž‰º
+    // é‡åŠ›ã«ã‚ˆã‚‹è½ä¸‹
     if (!isOnGround) {
-        vy++;  // d—Í‚Å‰Á‘¬
+        vy++;  // é‡åŠ›ã§åŠ é€Ÿ
         if (vy > MAX_FALL_SPEED) {
-            vy = MAX_FALL_SPEED;  // Å‘å—Ž‰º‘¬“x‚ð§ŒÀ
+            vy = MAX_FALL_SPEED;  // æœ€å¤§è½ä¸‹é€Ÿåº¦ã‚’åˆ¶é™
         }
     }
 
-    // ‚’¼•ûŒü‚ÌˆÚ“®
+    // åž‚ç›´æ–¹å‘ã®ç§»å‹•
     nextY += vy;
 
-    // “–‚½‚è”»’è‚ðƒ`ƒFƒbƒN
+    // å½“ãŸã‚Šåˆ¤å®šã‚’ãƒã‚§ãƒƒã‚¯
     if (!CheckCollision(nextX, nextY)) {
         x = nextX;
         y = nextY;
     }
     else {
-        // ’n–Ê‚Æ‚ÌÕ“ËŽž‚É‚’¼‘¬“x‚ðƒŠƒZƒbƒg
+        // åœ°é¢ã¨ã®è¡çªæ™‚ã«åž‚ç›´é€Ÿåº¦ã‚’ãƒªã‚»ãƒƒãƒˆ
         if (vy > 0) {
             vy = 0;
         }
     }
 
-    // ƒvƒŒƒCƒ„[‚ª’n–Ê‚É‚¢‚é‚©‚Ç‚¤‚©Šm”F
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒåœ°é¢ã«ã„ã‚‹ã‹ã©ã†ã‹ç¢ºèª
     isOnGround = IsOnGround();
     if (isOnGround) {
-        jumpsLeft = MAX_JUMPS;  // ’n–Ê‚É‚¢‚é‚È‚çƒWƒƒƒ“ƒv‰ñ”‚ðƒŠƒZƒbƒg
+        jumpsLeft = MAX_JUMPS;  // åœ°é¢ã«ã„ã‚‹ãªã‚‰ã‚¸ãƒ£ãƒ³ãƒ—å›žæ•°ã‚’ãƒªã‚»ãƒƒãƒˆ
     }
 }
 
-// “–‚½‚è”»’è‚ðƒ`ƒFƒbƒN‚·‚é
+// å½“ãŸã‚Šåˆ¤å®šã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
 bool Player::CheckCollision(int nextX, int nextY) {
-    // ƒvƒŒƒCƒ„[‚Ì4‹÷‚ðƒ`ƒFƒbƒN
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®4éš…ã‚’ãƒã‚§ãƒƒã‚¯
     int left = nextX;
     int right = nextX + PLAYER_SIZE - 1;
     int top = nextY;
     int bottom = nextY + PLAYER_SIZE - 1;
 
-    // ¶ãA‰EãA¶‰ºA‰E‰º‚Ì“–‚½‚è”»’è
+    // å·¦ä¸Šã€å³ä¸Šã€å·¦ä¸‹ã€å³ä¸‹ã®å½“ãŸã‚Šåˆ¤å®š
     if (map->IsHit(left, top) || map->IsHit(right, top) || map->IsHit(left, bottom) || map->IsHit(right, bottom)) {
         return true;
     }
 
-    return false;  // “–‚½‚Á‚Ä‚¢‚È‚¢ê‡
+    return false;  // å½“ãŸã£ã¦ã„ãªã„å ´åˆ
 }
 
-// ƒvƒŒƒCƒ„[‚Ì‰º‚É’n–Ê‚ª‚ ‚é‚©‚ðŠm”F‚·‚é
+// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä¸‹ã«åœ°é¢ãŒã‚ã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
 bool Player::IsOnGround() {
     int left = x;
     int right = x + PLAYER_SIZE - 1;
-    int bottom = y + PLAYER_SIZE;  // ƒvƒŒƒCƒ„[‚Ì‰º•”‚Ì1ƒsƒNƒZƒ‹‰º‚ðƒ`ƒFƒbƒN
+    int bottom = y + PLAYER_SIZE;  // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä¸‹éƒ¨ã®1ãƒ”ã‚¯ã‚»ãƒ«ä¸‹ã‚’ãƒã‚§ãƒƒã‚¯
 
-    // ¶‰º‚Æ‰E‰º‚Ì‰º‚ÉƒuƒƒbƒN‚ª‚ ‚ê‚Î’n–Ê‚É‚¢‚é‚Æ”»’è
+    // å·¦ä¸‹ã¨å³ä¸‹ã®ä¸‹ã«ãƒ–ãƒ­ãƒƒã‚¯ãŒã‚ã‚Œã°åœ°é¢ã«ã„ã‚‹ã¨åˆ¤å®š
     return map->IsHit(left, bottom) || map->IsHit(right, bottom);
 }
