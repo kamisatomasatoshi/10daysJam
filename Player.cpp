@@ -3,11 +3,7 @@
 
 // コンストラクタ
 Player::Player(int startX, int startY, MapChip* map)
-{
-	: x(startX), y(startY), vx(0), vy(0), jumpsLeft(MAX_JUMPS), jumpCooldown(0), isOnGround(false), map(map) {
-	LoadTexture(); // �v���C���[�̃e�N�X�`����ǂݍ���
-
-    : x(startX), y(startY), vx(0), vy(0), jumpsLeft(MAX_JUMPS), jumpCooldown(0), isOnGround(false), map(map) {
+ :x(startX), y(startY), vx(0), vy(0), jumpsLeft(MAX_JUMPS), jumpCooldown(0), isOnGround(false), map(map) {
     LoadTexture(); // プレイヤーのテクスチャを読み込む
 
 }
@@ -23,17 +19,12 @@ Player::~Player() {
 // テクスチャを読み込む
 void Player::LoadTexture() {
 
-	texture = LoadGraph("Resource/blockTexture.png"); // �v���C���[�̃e�N�X�`��
-	if (texture == -1) {
-		printfDx("�v���C���[�̃e�N�X�`���̓ǂݍ��݂Ɏ��s���܂����B\n");
-	}
-
-
+	
     texture = LoadGraph("slime.png"); // プレイヤーのテクスチャ
 
     if (texture == -1) {
         printfDx("プレイヤーのテクスチャの読み込みに失敗しました。\n");
-    }
+    };
 
 }
 
