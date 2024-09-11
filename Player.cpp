@@ -3,37 +3,59 @@
 
 // コンストラクタ
 Player::Player(int startX, int startY, MapChip* map)
+{
+	: x(startX), y(startY), vx(0), vy(0), jumpsLeft(MAX_JUMPS), jumpCooldown(0), isOnGround(false), map(map) {
+	LoadTexture(); // �v���C���[�̃e�N�X�`����ǂݍ���
+
     : x(startX), y(startY), vx(0), vy(0), jumpsLeft(MAX_JUMPS), jumpCooldown(0), isOnGround(false), map(map) {
     LoadTexture(); // プレイヤーのテクスチャを読み込む
+
 }
 
 // デストラクタ
 Player::~Player() {
+
+
     UnloadTexture(); // プレイヤーのテクスチャを解放
+
 }
 
 // テクスチャを読み込む
 void Player::LoadTexture() {
+
+	texture = LoadGraph("Resource/blockTexture.png"); // �v���C���[�̃e�N�X�`��
+	if (texture == -1) {
+		printfDx("�v���C���[�̃e�N�X�`���̓ǂݍ��݂Ɏ��s���܂����B\n");
+	}
+
 
     texture = LoadGraph("slime.png"); // プレイヤーのテクスチャ
 
     if (texture == -1) {
         printfDx("プレイヤーのテクスチャの読み込みに失敗しました。\n");
     }
+
 }
 
 // テクスチャを解放する
 void Player::UnloadTexture() {
-    DeleteGraph(texture);
+	DeleteGraph(texture);
 }
 
 // プレイヤーの描画
 void Player::Draw() {
-    DrawGraph(x, y, texture, TRUE);
+	if (playerFlag == true) {
+		DrawGraph(x, y, texture, TRUE);
+	}
+
+	DrawFormatString(512, 0, GetColor(255, 255, 255), "�d��%d", vy);
+	DrawFormatString(512, 16, GetColor(255, 255, 255), "�t���O%d", playerFlag);
+	DrawFormatString(512, 32, GetColor(255, 255, 255), "%d", isOnGround);
 }
 
 // プレイヤーの更新（移動、ジャンプ、落下）
 void Player::Update() {
+  
     int nextX = x, nextY = y;
 
     // 水平方向の移動
@@ -84,10 +106,12 @@ void Player::Update() {
     if (isOnGround) {
         jumpsLeft = MAX_JUMPS;  // 地面にいるならジャンプ回数をリセット
     }
+
 }
 
 // 当たり判定をチェックする
 bool Player::CheckCollision(int nextX, int nextY) {
+
     // プレイヤーの4隅をチェック
     int left = nextX;
     int right = nextX + PLAYER_SIZE - 1;
@@ -100,14 +124,24 @@ bool Player::CheckCollision(int nextX, int nextY) {
     }
 
     return false;  // 当たっていない場合
+
 }
 
 // プレイヤーの下に地面があるかを確認する
 bool Player::IsOnGround() {
+
+	int left = x;
+	int right = x + PLAYER_SIZE - 1;
+	int bottom = y + PLAYER_SIZE;  // �v���C���[�̉�����1�s�N�Z�������`�F�b�N
+
+	// �����ƉE���̉��Ƀu���b�N������Βn�ʂɂ���Ɣ���
+	return map->IsHit(left, bottom) || map->IsHit(right, bottom);
+
     int left = x;
     int right = x + PLAYER_SIZE - 1;
     int bottom = y + PLAYER_SIZE;  // プレイヤーの下部の1ピクセル下をチェック
 
     // 左下と右下の下にブロックがあれば地面にいると判定
     return map->IsHit(left, bottom) || map->IsHit(right, bottom);
+
 }
