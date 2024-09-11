@@ -27,6 +27,7 @@ private:
     int jumpCooldown;     // ジャンプクールタイム
     bool isOnGround;      // プレイヤーが地面にいるかどうか
     int texture;          // プレイヤーのテクスチャ
+    int playerFlag = true;
     MapChip* map;         // マップへのポインタ（当たり判定に使用）
 
     // 当たり判定をチェックする
