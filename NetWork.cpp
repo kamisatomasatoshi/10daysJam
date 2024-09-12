@@ -32,7 +32,7 @@ pplx::task<void> NetWork::GetIDFaculties(const std::wstring& baseUrl, const util
 }
 
 // Postメソッドの実装
-pplx::task<int> NetWork::Post(const std::wstring& url, const std::wstring& name, int score) {
+pplx::task<void> NetWork::Post(const std::wstring& url, const std::wstring& name, int score, const std::wstring& getAllScoresUrl) {
     return pplx::create_task([=] {
         json::value postData;
         postData[L"name"] = json::value::string(name);
@@ -41,18 +41,25 @@ pplx::task<int> NetWork::Post(const std::wstring& url, const std::wstring& name,
         http_client client(url);
         return client.request(methods::POST, L"", postData.serialize(), L"application/json");
         })
-        .then([](http_response response) {
+        .then([=](http_response response) -> pplx::task<void> {  // 修正: task<void> を返す
             if (response.status_code() == status_codes::Created || response.status_code() == status_codes::OK) {
-                return response.extract_json();
+                return response.extract_json().then([=](json::value json) {
+                    if (json.has_field(L"rowCount")) {
+                        std::wcout << L"Post successful, rowCount: " << json[L"rowCount"].as_integer() << std::endl;
+                        // スコア送信が成功した後、ランキングを取得して表示
+                        return GetAllScores(getAllScoresUrl);  // 修正: wait() は不要
+                    }
+                    else {
+                        std::wcerr << L"Post failed: Invalid response." << std::endl;
+                        return pplx::task_from_result();  // 空のタスクを返す
+                    }
+                    });
             }
-            return pplx::task_from_result(json::value());  // エラー時の空のJSONを返す
-            })
-            .then([](json::value json) {
-                if (json.has_field(L"rowCount")) {
-                    return json[L"rowCount"].as_integer();  // 成功した場合の処理
-                }
-                return 0;  // 失敗した場合
-                });
+            else {
+                std::wcerr << L"Post failed: HTTP error " << response.status_code() << std::endl;
+                return pplx::task_from_result();  // エラー時の空のタスクを返す
+            }
+            });
 }
 
 // 新しいメソッドの実装: 全てのスコアを取得

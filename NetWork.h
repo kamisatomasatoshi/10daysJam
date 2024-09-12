@@ -24,7 +24,7 @@ public:
 
     pplx::task<void> GetIDFaculties(const std::wstring& baseUrl, const utility::string_t& id);
 
-    pplx::task<int> Post(const std::wstring& url, const std::wstring& name , int score);
+    pplx::task<void> Post(const std::wstring& url, const std::wstring& name, int score, const std::wstring& getAllScoresUrl);
 
     pplx::task<void> Login(const std::wstring& url, const std::wstring& name, const std::wstring& password);
 };
