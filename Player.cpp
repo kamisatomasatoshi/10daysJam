@@ -81,6 +81,14 @@ void Player::Update() {
     isOnGround = IsOnGround();
     if (isOnGround) {
         jumpsLeft = MAX_JUMPS;  // 地面にいるならジャンプ回数をリセット
+        if (vy => )//落下ダメージ＞＝マップチップ　＊　６　
+        {
+            playerFlag = false;
+        }
+        else
+        {
+            //落下ダメージ = 0;
+        }
     }
 }
 
