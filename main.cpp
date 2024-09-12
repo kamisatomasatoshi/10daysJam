@@ -7,28 +7,27 @@
 const TCHAR TITLE[] = "落ちるんデス";
 
 // ウィンドウ横幅
-const int WIN_WIDTH = 600;
+const int WIN_WIDTH = 456;
 
 // ウィンドウ縦幅
-const int WIN_HEIGHT = 800;
+const int WIN_HEIGHT = 640;
 
 enum Scene
 {
-	Title,//タイトル
-	Game,//ステージ
-	Clear,
-	Over,
-	Ranking
+
+	Title,	// タイトル
+	Game,	// ステージ
+	Clear,	// クリア
+	Over,	// オーバー
+
 };
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
 	_In_ int nCmdShow) {
 
-	NetWork network;
-	const std::wstring postUrl = L"https://swgame-roan.vercel.app/all/scores";  // スコア送信用のAPI URL
-	const std::wstring getAllScoresUrl = L"https://swgame-roan.vercel.app/all/scores";  // ランキング取得用のAPI URL
+	// 使用する文字コードを utf8 に設定
+	SetUseCharCodeFormat(DX_CHARCODEFORMAT_UTF8);
 
-	
 
 	// ウィンドウモードに設定
 	ChangeWindowMode(TRUE);
@@ -82,92 +81,50 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		// 更新処理
 		switch (scene_)
 		{
-		case Scene::Title:
-			if (keys[KEY_INPUT_RETURN] == 1) {
-				scene_ = Scene::Game;
+		case Title:
+			if (keys[KEY_INPUT_RETURN] == true && oldkeys[KEY_INPUT_RETURN] == false) {
+				scene_ = Game;
 			}
 			break;
-		case Scene::Game:
-			player->Update();
-			break;
-
-		case Scene::Clear:
-		
-
-			if (keys[KEY_INPUT_RETURN] == 1) {
-				scene_ = Scene::Ranking;
+		case Game:
+			player->Update(WIN_HEIGHT);
+			if (player->gualFlag == true)
+			{
+				scene_ = Clear;
+			}
+			if (player->playerFlag == false) {
+				scene_ = Over;
 			}
 			break;
-
-		case Scene::Over:
-			
-
-			if (keys[KEY_INPUT_RETURN] == 1) {
-				scene_ = Scene::Ranking;
+		case Clear:
+			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
+				scene_ = Game;
 			}
 			break;
 
-		case Scene::Ranking:
-		
-			// RankingシーンでスコアをPOSTし、ランキングを取得して表示
-		{
-			static bool rankingRequested = false; // 1回だけリクエストするためのフラグ
-			static std::vector<std::pair<std::wstring, int>> playerScores; // ランキングデータを保持
-			static bool dataReceived = false; // データが受信されたかどうかを追跡
-
-			if (!rankingRequested) {
-				// ネットワークの初期化
-				NetWork network;
-				const std::wstring postUrl = L"http://example.com/api/post_score";  // スコア送信用のAPI URL
-				const std::wstring getAllScoresUrl = L"http://example.com/api/get_all_scores";  // ランキング取得用のAPI URL
-				std::wstring name = L"Player1";  // プレイヤー名（仮）
-				int score;// = player->GetScore();  // プレイヤーのスコア
-
-				// 非同期でスコアをPOSTし、その後ランキングを取得して描画
-				try {
-					network.Post(postUrl, name, score, getAllScoresUrl).then([&]() {
-						// サーバーからランキングを取得して、結果を playerScores に格納
-						network.GetAllScores(getAllScoresUrl).then([&](std::vector<std::pair<std::wstring, int>> scores) {
-							playerScores = scores; // ランキングデータを保存
-							dataReceived = true;   // データを受信したことを記録
-							}).wait();
-						}).wait();
-				}
-				catch (const std::exception& e) {
-					std::wcerr << L"Error: " << e.what() << std::endl;
-				}
-
-				rankingRequested = true; // リクエストは1回だけ行う
+		case Over:
+			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
+				scene_ = Game;
 			}
-
-			// データが受信されたらランキングを表示
-			if (dataReceived) {
-				for (size_t i = 0; i < playerScores.size(); ++i) {
-					// DXLibでランキングを描画
-					DrawFormatString(100, 50 + i * 20, GetColor(255, 255, 255), "%d. %ls : %d", (int)(i + 1), playerScores[i].first.c_str(), playerScores[i].second);
-				}
-			}
-		}
-
-		if (keys[KEY_INPUT_RETURN] == 1) {
-			scene_ = Scene::Title;
-		}
-		break;
-
-			break;
-		default:
 
 			break;
 		}
 
 		// 描画処理
-		DrawFormatString(0, 0, GetColor(255, 255, 255), "SceneNo%d", scene_);
-		if (scene_ == Scene::Game) {
+		if (scene_ == Game) {
 			player->Draw();
-			mapChip->Draw();
-
+			mapChip->Draw(player->scrollY);
+			DrawFormatString(128, 144, GetColor(255, 255, 255), "%d", player->gualFlag);
+			DrawFormatString(128, 128, GetColor(255, 255, 255), "%d", player->playerFlag);
+		}
+		else if (scene_ == Clear) {
+			DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームクリア");
+		}
+		else if (scene_ == Over) {
+			DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームオーバー");
 		}
 
+		DrawFormatString(0, 0, GetColor(255, 255, 255), "SceneNo%d", scene_);
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
 		ScreenFlip();
