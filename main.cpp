@@ -6,19 +6,24 @@
 const TCHAR TITLE[] = "落ちるんデス";
 
 // ウィンドウ横幅
-const int WIN_WIDTH = 600;
+const int WIN_WIDTH = 456;
 
 // ウィンドウ縦幅
-const int WIN_HEIGHT = 800;
+const int WIN_HEIGHT = 640;
 
 enum Scene
 {
-	Title,//タイトル
-	Game,//ステージ
+	Title,	// タイトル
+	Game,	// ステージ
+	Clear,	// クリア
+	Over,	// オーバー
 };
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
 	_In_ int nCmdShow) {
+	// 使用する文字コードを utf8 に設定
+	SetUseCharCodeFormat(DX_CHARCODEFORMAT_UTF8);
+
 	// ウィンドウモードに設定
 	ChangeWindowMode(TRUE);
 
@@ -71,27 +76,48 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		// 更新処理
 		switch (scene_)
 		{
-		case Scene::Title:
-			if (keys[KEY_INPUT_RETURN] == 1) {
-				scene_ = Scene::Game;
+		case Title:
+			if (keys[KEY_INPUT_RETURN] == true && oldkeys[KEY_INPUT_RETURN] == false) {
+				scene_ = Game;
 			}
 			break;
-		case Scene::Game:
-			player->Update();
+		case Game:
+			player->Update(WIN_HEIGHT);
+			if (player->gualFlag == true)
+			{
+				scene_ = Clear;
+			}
+			if (player->playerFlag == false) {
+				scene_ = Over;
+			}
 			break;
-		default:
-
+		case Clear:
+			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
+				scene_ = Game;
+			}
+			break;
+		case Over:
+			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
+				scene_ = Game;
+			}
 			break;
 		}
 
 		// 描画処理
-		DrawFormatString(0, 0, GetColor(255, 255, 255), "SceneNo%d", scene_);
-		if (scene_ == Scene::Game) {
+		if (scene_ == Game) {
 			player->Draw();
-			mapChip->Draw();
-
+			mapChip->Draw(player->scrollY);
+			DrawFormatString(128, 144, GetColor(255, 255, 255), "%d", player->gualFlag);
+			DrawFormatString(128, 128, GetColor(255, 255, 255), "%d", player->playerFlag);
+		}
+		else if (scene_ == Clear) {
+			DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームクリア");
+		}
+		else if (scene_ == Over) {
+			DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームオーバー");
 		}
 
+		DrawFormatString(0, 0, GetColor(255, 255, 255), "SceneNo%d", scene_);
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
 		ScreenFlip();
