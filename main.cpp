@@ -19,7 +19,7 @@ enum Scene
 	Game,	// ステージ
 	Clear,	// クリア
 	Over,	// オーバー
-
+	Ranking //ランキング
 };
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
@@ -59,7 +59,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Player* player = new Player(128, 0, mapChip);
 	int scene_ = Scene::Title;
 
+	//const std::wstring URL = L"https://swgame-roan.vercel.app/all/scores";  // スコア送信のURL
+	//const std::wstring getAllScoresUrl = L"https://swgame-roan.vercel.app/all/scores";  // スコア取得のURL
+
 	// ゲームループで使う変数の宣言
+	// POSTする名前とスコア
+	std::wstring name = L"Player3";  // プレイヤーの名前
+	int score = 1000;                // スコア
+
+	NetWork network;
 
 
 	// 最新のキーボード情報用
@@ -79,6 +87,21 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		//---------  ここからプログラムを記述  ----------//
 
 		// 更新処理
+		
+		try {
+			// 1. スコアをPOSTする
+			network.Post(name, score).then([&]() {
+				// 2. スコアリストを取得する（POSTの成功後に実行）
+				return network.GetAllScores().then([&](std::vector<std::pair<std::wstring, int>> playerScores) {
+					// 3. スコアリストを表示する
+					network.DisplayScores(playerScores);
+					});
+				}).wait();  // 最後にwait()を使用して非同期処理が完了するまで待つ
+		}
+		catch (const std::exception& e) {
+			std::wcerr << L"Error: " << e.what() << std::endl;
+			break;
+		}
 		switch (scene_)
 		{
 		case Title:
@@ -108,6 +131,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}
 
 			break;
+
+		case Ranking:
+			
+			
+
+			break;
+
+
 		}
 
 		// 描画処理
