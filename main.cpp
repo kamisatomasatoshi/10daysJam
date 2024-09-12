@@ -24,9 +24,9 @@ enum Scene
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
 	_In_ int nCmdShow) {
 
-	NetWork network;
-	const std::wstring postUrl = L"https://swgame-roan.vercel.app/all/scores";  // スコア送信用のAPI URL
-	const std::wstring getAllScoresUrl = L"https://swgame-roan.vercel.app/all/scores";  // ランキング取得用のAPI URL
+	//NetWork network;
+	//const std::wstring postUrl = L"https://swgame-roan.vercel.app/all/scores";  // スコア送信用のAPI URL
+	//const std::wstring getAllScoresUrl = L"https://swgame-roan.vercel.app/all/scores";  // ランキング取得用のAPI URL
 
 	
 
@@ -110,44 +110,39 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case Scene::Ranking:
 		
 			// RankingシーンでスコアをPOSTし、ランキングを取得して表示
-		{
-			static bool rankingRequested = false; // 1回だけリクエストするためのフラグ
-			static std::vector<std::pair<std::wstring, int>> playerScores; // ランキングデータを保持
-			static bool dataReceived = false; // データが受信されたかどうかを追跡
+		//{
+		//	static bool rankingRequested = false; // 1回だけリクエストするためのフラグ
+		//	static std::vector<std::pair<std::wstring, int>> playerScores; // ランキングデータを保持
+		//	static bool dataReceived = false; // データが受信されたかどうかを追跡
 
-			if (!rankingRequested) {
-				// ネットワークの初期化
-				NetWork network;
-				const std::wstring postUrl = L"http://example.com/api/post_score";  // スコア送信用のAPI URL
-				const std::wstring getAllScoresUrl = L"http://example.com/api/get_all_scores";  // ランキング取得用のAPI URL
-				std::wstring name = L"Player1";  // プレイヤー名（仮）
-				int score;// = player->GetScore();  // プレイヤーのスコア
+		//	if (!rankingRequested) {
+		//		// ネットワークの初期化
+		//		NetWork network;
+		//		const std::wstring postUrl = L"http://example.com/api/post_score";  // スコア送信用のAPI URL
+		//		const std::wstring getAllScoresUrl = L"http://example.com/api/get_all_scores";  // ランキング取得用のAPI URL
+		//		std::wstring name = L"Player1";  // プレイヤー名（仮）
+		//		int score = 200;// = player->GetScore();  // プレイヤーのスコア
 
-				// 非同期でスコアをPOSTし、その後ランキングを取得して描画
-				try {
-					network.Post(postUrl, name, score, getAllScoresUrl).then([&]() {
-						// サーバーからランキングを取得して、結果を playerScores に格納
-						network.GetAllScores(getAllScoresUrl).then([&](std::vector<std::pair<std::wstring, int>> scores) {
-							playerScores = scores; // ランキングデータを保存
-							dataReceived = true;   // データを受信したことを記録
-							}).wait();
-						}).wait();
-				}
-				catch (const std::exception& e) {
-					std::wcerr << L"Error: " << e.what() << std::endl;
-				}
+		//		// 非同期でスコアをPOSTし、その後ランキングを取得して描画
+		//		try {
+		//			network.Post(postUrl, name, score, getAllScoresUrl).then([&]() {
+		//				}).wait();
+		//		}
+		//		catch (const std::exception& e) {
+		//			std::wcerr << L"Error: " << e.what() << std::endl;
+		//		}
 
-				rankingRequested = true; // リクエストは1回だけ行う
-			}
+		//		rankingRequested = true; // リクエストは1回だけ行う
+		//	}
 
-			// データが受信されたらランキングを表示
-			if (dataReceived) {
-				for (size_t i = 0; i < playerScores.size(); ++i) {
-					// DXLibでランキングを描画
-					DrawFormatString(100, 50 + i * 20, GetColor(255, 255, 255), "%d. %ls : %d", (int)(i + 1), playerScores[i].first.c_str(), playerScores[i].second);
-				}
-			}
-		}
+		//	// データが受信されたらランキングを表示
+		//	if (dataReceived) {
+		//		for (size_t i = 0; i < playerScores.size(); ++i) {
+		//			// DXLibでランキングを描画
+		//			//DrawFormatString(100, 50 + i * 20, GetColor(255, 255, 255), "%d. %ls : %d", (int)(i + 1), playerScores[i].first.c_str(), playerScores[i].second);
+		//		}
+		//	}
+		//}
 
 		if (keys[KEY_INPUT_RETURN] == 1) {
 			scene_ = Scene::Title;
@@ -161,7 +156,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		// 描画処理
-		DrawFormatString(0, 0, GetColor(255, 255, 255), "SceneNo%d", scene_);
+		//DrawFormatString(0, 0, GetColor(255, 255, 255), "SceneNo%d", scene_);
 		if (scene_ == Scene::Game) {
 			player->Draw();
 			mapChip->Draw();

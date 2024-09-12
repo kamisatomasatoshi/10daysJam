@@ -1,37 +1,36 @@
-#pragma once
+ï»¿#pragma once
 #include <cpprest/filestream.h>
 #include <cpprest/http_client.h>
 #include <iostream>
-
-using namespace utility; // •¶š—ñ•ÏŠ·‚È‚Ç‚Ìˆê”Ê“I‚Èƒ†[ƒeƒBƒŠƒeƒB
-using namespace web; // URI‚Ì‚æ‚¤‚È‹¤’Ê‚Ì‹@”\
-using namespace web::http; // ‹¤’Ê‚ÌHTTP‹@”\
-using namespace web::http::client; // HTTP ƒNƒ‰ƒCƒAƒ“ƒg‚Ì‹@”\
-using namespace concurrency::streams; // ”ñ“¯ŠúƒXƒgƒŠ[ƒ€
+#include <DxLib.h>
+using namespace utility; // æ–‡å­—åˆ—å¤‰æ›ãªã©ã®ä¸€èˆ¬çš„ãªãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£
+using namespace web; // URIã®ã‚ˆã†ãªå…±é€šã®æ©Ÿèƒ½
+using namespace web::http; // å…±é€šã®HTTPæ©Ÿèƒ½
+using namespace web::http::client; // HTTP ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã®æ©Ÿèƒ½
+using namespace concurrency::streams; // éåŒæœŸã‚¹ãƒˆãƒªãƒ¼ãƒ 
 
 
 
 
 class NetWork {
 public:
-    // ƒƒ\ƒbƒh‚ÌéŒ¾
-    template <class T>
+    // ãƒ¡ã‚½ãƒƒãƒ‰ã®å®£è¨€
 
 
-    pplx::task<T> GetAllFaculties(const std::wstring& url);
+    //pplx::task<T> GetAllFaculties(const std::wstring& url);
 
     pplx::task<void> GetAllScores(const std::wstring& url);
 
-    pplx::task<void> GetIDFaculties(const std::wstring& baseUrl, const utility::string_t& id);
+   // pplx::task<void> GetIDFaculties(const std::wstring& baseUrl, const utility::string_t& id);
 
     pplx::task<void> Post(const std::wstring& url, const std::wstring& name, int score, const std::wstring& getAllScoresUrl);
 
-    pplx::task<void> Login(const std::wstring& url, const std::wstring& name, const std::wstring& password);
+    //pplx::task<void> Login(const std::wstring& url, const std::wstring& name, const std::wstring& password);
 };
 
-//main.cpp‚Ìg‚¢•û
-NetWork network;
-const std::wstring url = L"http://example.com/api/get_all_scores"; // ƒT[ƒo[‚ÌAPI URL
+//main.cppã®ä½¿ã„æ–¹
+//NetWork network;
+//const std::wstring url = L"http://example.com/api/get_all_scores"; // ã‚µãƒ¼ãƒãƒ¼ã®API URL
 
 //try {
 //    network.GetAllScores(url).wait();

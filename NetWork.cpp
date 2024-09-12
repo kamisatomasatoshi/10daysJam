@@ -1,23 +1,22 @@
-#include "NetWork.h"
-#include <DxLib.h>
+ï»¿#include "NetWork.h"
 
 
-// GetAllFaculties‚ÌÀ‘•
-template <class T>
-pplx::task<T> NetWork::GetAllFaculties(const std::wstring& url) {
-    return pplx::create_task([=] {
-        http_client client(url);
-        return client.request(methods::GET);
-        })
-        .then([](http_response response) {
-            if (response.status_code() == status_codes::OK) {
-                return response.extract_json();
-            }
-            });
-}
 
-// GetIDFaculties‚ÌÀ‘•
-pplx::task<void> NetWork::GetIDFaculties(const std::wstring& baseUrl, const utility::string_t& id) {
+// GetAllFacultiesã®å®Ÿè£…
+//pplx::task<T> NetWork::GetAllFaculties(const std::wstring& url) {
+//    return pplx::create_task([=] {
+//        http_client client(url);
+//        return client.request(methods::GET);
+//        })
+//        .then([](http_response response) {
+//            if (response.status_code() == status_codes::OK) {
+//                return response.extract_json();
+//            }
+//            });
+//}
+
+// GetIDFacultiesã®å®Ÿè£…
+/*plx::task<void> NetWork::GetIDFaculties(const std::wstring& baseUrl, const utility::string_t& id) {
     return pplx::create_task([=] {
         http_client client(baseUrl + L"/" + id);
         return client.request(methods::GET);
@@ -29,40 +28,40 @@ pplx::task<void> NetWork::GetIDFaculties(const std::wstring& baseUrl, const util
                 std::wcout << body.get().c_str() << std::endl;
             }
             });
-}
+}*/
 
-// Postƒƒ\ƒbƒh‚ÌÀ‘•
+// Postãƒ¡ã‚½ãƒƒãƒ‰ã®å®Ÿè£…
 pplx::task<void> NetWork::Post(const std::wstring& url, const std::wstring& name, int score, const std::wstring& getAllScoresUrl) {
     return pplx::create_task([=] {
         json::value postData;
         postData[L"name"] = json::value::string(name);
-        postData[L"score"] = json::value::number(score);  // ƒXƒRƒA‚ğJSON‚É’Ç‰Á
+        postData[L"score"] = json::value::number(score);  // ã‚¹ã‚³ã‚¢ã‚’JSONã«è¿½åŠ 
 
         http_client client(url);
         return client.request(methods::POST, L"", postData.serialize(), L"application/json");
         })
-        .then([=](http_response response) -> pplx::task<void> {  // C³: task<void> ‚ğ•Ô‚·
+        .then([=](http_response response) -> pplx::task<void> {  // ä¿®æ­£: task<void> ã‚’è¿”ã™
             if (response.status_code() == status_codes::Created || response.status_code() == status_codes::OK) {
                 return response.extract_json().then([=](json::value json) {
                     if (json.has_field(L"rowCount")) {
                         std::wcout << L"Post successful, rowCount: " << json[L"rowCount"].as_integer() << std::endl;
-                        // ƒXƒRƒA‘—M‚ª¬Œ÷‚µ‚½ŒãAƒ‰ƒ“ƒLƒ“ƒO‚ğæ“¾‚µ‚Ä•\¦
-                        return GetAllScores(getAllScoresUrl);  // C³: wait() ‚Í•s—v
+                        // ã‚¹ã‚³ã‚¢é€ä¿¡ãŒæˆåŠŸã—ãŸå¾Œã€ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚’å–å¾—ã—ã¦è¡¨ç¤º
+                        //return GetAllScores(getAllScoresUrl);  // ä¿®æ­£: wait() ã¯ä¸è¦
                     }
                     else {
                         std::wcerr << L"Post failed: Invalid response." << std::endl;
-                        return pplx::task_from_result();  // ‹ó‚Ìƒ^ƒXƒN‚ğ•Ô‚·
+                        return pplx::task_from_result();  // ç©ºã®ã‚¿ã‚¹ã‚¯ã‚’è¿”ã™
                     }
                     });
             }
             else {
                 std::wcerr << L"Post failed: HTTP error " << response.status_code() << std::endl;
-                return pplx::task_from_result();  // ƒGƒ‰[‚Ì‹ó‚Ìƒ^ƒXƒN‚ğ•Ô‚·
+                return pplx::task_from_result();  // ã‚¨ãƒ©ãƒ¼æ™‚ã®ç©ºã®ã‚¿ã‚¹ã‚¯ã‚’è¿”ã™
             }
             });
 }
 
-// V‚µ‚¢ƒƒ\ƒbƒh‚ÌÀ‘•: ‘S‚Ä‚ÌƒXƒRƒA‚ğæ“¾
+// æ–°ã—ã„ãƒ¡ã‚½ãƒƒãƒ‰ã®å®Ÿè£…: å…¨ã¦ã®ã‚¹ã‚³ã‚¢ã‚’å–å¾—
 pplx::task<void> NetWork::GetAllScores(const std::wstring& url) {
     return pplx::create_task([=] {
         http_client client(url);
@@ -72,7 +71,7 @@ pplx::task<void> NetWork::GetAllScores(const std::wstring& url) {
             if (response.status_code() == status_codes::OK) {
                 return response.extract_json();
             }
-            return pplx::task_from_result(json::value());  // ƒGƒ‰[‚Ì‹ó‚ÌJSON‚ğ•Ô‚·
+            return pplx::task_from_result(json::value());  // ã‚¨ãƒ©ãƒ¼æ™‚ã®ç©ºã®JSONã‚’è¿”ã™
             })
             .then([](json::value jsonResponse) {
                 if (jsonResponse.is_array()) {
@@ -83,54 +82,55 @@ pplx::task<void> NetWork::GetAllScores(const std::wstring& url) {
                         playerScores.push_back({ name, score });
                     }
 
-                    // ƒXƒRƒA‡‚Éƒ\[ƒgi~‡j
+                    // ã‚¹ã‚³ã‚¢é †ã«ã‚½ãƒ¼ãƒˆï¼ˆé™é †ï¼‰
                     std::sort(playerScores.begin(), playerScores.end(),
                         [](const std::pair<std::wstring, int>& a, const std::pair<std::wstring, int>& b) {
                             return a.second > b.second;
                         });
 
-                    // ƒ‰ƒ“ƒLƒ“ƒO•\¦‚ğDXLib‚Ås‚¤
+                    // ãƒ©ãƒ³ã‚­ãƒ³ã‚°è¡¨ç¤ºã‚’DXLibã§è¡Œã†
                     for (size_t i = 0; i < playerScores.size(); ++i) {
-                        // wstring‚©‚çCŒ¾ŒêŒ`®‚ÌƒƒCƒh•¶š—ñ‚É•ÏŠ·‚µADXLib‚Å•`‰æ
+                        // wstringã‹ã‚‰Cè¨€èªå½¢å¼ã®ãƒ¯ã‚¤ãƒ‰æ–‡å­—åˆ—ã«å¤‰æ›ã—ã€DXLibã§æç”»
                         std::wstring name = playerScores[i].first;
-                        DrawFormatString(100, 50 + i * 20, GetColor(255, 255, 255), "%d. %ls : %d", (int)(i + 1), name.c_str(), playerScores[i].second);
+                        //DrawFormatString(100, 300 + i * 20, GetColor(255, 255, 255), "%d. %ls : %d", (int)(i + 1), name.c_str(), playerScores[i].second);
                     }
                 }
                 else {
                     std::wcerr << L"Error: Invalid JSON format." << std::endl;
                 }
                 });
+
 }
 
-// Loginƒƒ\ƒbƒh‚ÌÀ‘•
-pplx::task<void> NetWork::Login(const std::wstring& url, const std::wstring& name, const std::wstring& password) {
-    return pplx::create_task([=] {
-        json::value postData;
-        postData[L"name"] = json::value::string(name);
-        postData[L"password"] = json::value::string(password);
-
-        http_client client(url);
-        return client.request(methods::POST, L"", postData.serialize(), L"application/json");
-        })
-        .then([](http_response response) {
-            if (response.status_code() == status_codes::OK) {
-                return response.extract_json();
-            }
-            return pplx::task_from_result(json::value());
-            })
-            .then([](json::value jsonResponse) {
-                std::wcout << L"Response: " << jsonResponse.serialize() << std::endl;
-                if (jsonResponse.has_field(L"login_status")) {
-                    auto login_status = jsonResponse[L"login_status"].as_string();
-                    if (login_status == L"success") {
-                        std::wcout << L"Login successful!" << std::endl;
-                    }
-                    else {
-                        std::wcout << L"Login failed: " << login_status << std::endl;
-                    }
-                }
-                else {
-                    std::wcout << L"Invalid response format." << std::endl;
-                }
-                });
-}
+// Loginãƒ¡ã‚½ãƒƒãƒ‰ã®å®Ÿè£…
+//pplx::task<void> NetWork::Login(const std::wstring& url, const std::wstring& name, const std::wstring& password) {
+//  /*  return pplx::create_task([=] {
+//        json::value postData;
+//        postData[L"name"] = json::value::string(name);
+//        postData[L"password"] = json::value::string(password);
+//
+//        http_client client(url);
+//        return client.request(methods::POST, L"", postData.serialize(), L"application/json");
+//        })
+//        .then([](http_response response) {
+//            if (response.status_code() == status_codes::OK) {
+//                return response.extract_json();
+//            }
+//            return pplx::task_from_result(json::value());
+//            })
+//            .then([](json::value jsonResponse) {
+//                std::wcout << L"Response: " << jsonResponse.serialize() << std::endl;
+//                if (jsonResponse.has_field(L"login_status")) {
+//                    auto login_status = jsonResponse[L"login_status"].as_string();
+//                    if (login_status == L"success") {
+//                        std::wcout << L"Login successful!" << std::endl;
+//                    }
+//                    else {
+//                        std::wcout << L"Login failed: " << login_status << std::endl;
+//                    }
+//                }
+//                else {
+//                    std::wcout << L"Invalid response format." << std::endl;
+//                }
+//                });*/
+//}

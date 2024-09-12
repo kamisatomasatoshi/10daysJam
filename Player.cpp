@@ -39,9 +39,9 @@ void Player::Draw() {
 		DrawGraph(x, y, texture, TRUE);
 	}
 
-	DrawFormatString(512, 0, GetColor(255, 255, 255), "�d��%d", vy);
+	/*DrawFormatString(512, 0, GetColor(255, 255, 255), "�d��%d", vy);
 	DrawFormatString(512, 16, GetColor(255, 255, 255), "�t���O%d", playerFlag);
-	DrawFormatString(512, 32, GetColor(255, 255, 255), "%d", isOnGround);
+	DrawFormatString(512, 32, GetColor(255, 255, 255), "%d", isOnGround);*/
 }
 
 // プレイヤーの更新（移動、ジャンプ、落下）
