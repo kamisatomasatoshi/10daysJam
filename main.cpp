@@ -1,6 +1,7 @@
 ﻿#include "DxLib.h"
 #include "MapChip.h"
 #include "Player.h"
+#include "NetWork.h"
 
 // ウィンドウのタイトルに表示する文字列
 const TCHAR TITLE[] = "落ちるんデス";
@@ -13,16 +14,20 @@ const int WIN_HEIGHT = 640;
 
 enum Scene
 {
+
 	Title,	// タイトル
 	Game,	// ステージ
 	Clear,	// クリア
 	Over,	// オーバー
+
 };
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
 	_In_ int nCmdShow) {
+
 	// 使用する文字コードを utf8 に設定
 	SetUseCharCodeFormat(DX_CHARCODEFORMAT_UTF8);
+
 
 	// ウィンドウモードに設定
 	ChangeWindowMode(TRUE);
@@ -96,10 +101,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				scene_ = Game;
 			}
 			break;
+
 		case Over:
 			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
 				scene_ = Game;
 			}
+
 			break;
 		}
 

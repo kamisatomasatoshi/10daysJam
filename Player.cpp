@@ -123,6 +123,7 @@ bool Player::CheckCollision(int nextX, int nextY) {
 // プレイヤーの下に地面があるかを確認する
 bool Player::IsOnGround() {
 
+
 	int left = x;
 	int right = x + PLAYER_SIZE - 1;
 	int bottom = y + PLAYER_SIZE;  // プレイヤーの下部の1ピクセル下をチェック
@@ -133,6 +134,7 @@ bool Player::IsOnGround() {
 
 // プレイヤーの下に地面があるかを確認する
 bool Player::IsOnGaul() {
+
 
 	int left = x;
 	int right = x + PLAYER_SIZE - 1;
