@@ -1,4 +1,5 @@
 #include "NetWork.h"
+#include <DxLib.h>
 
 
 // GetAllFacultiesの実装
@@ -35,40 +36,40 @@ pplx::task<int> NetWork::Post(const std::wstring& url, const std::wstring& name,
     return pplx::create_task([=] {
         json::value postData;
         postData[L"name"] = json::value::string(name);
+        postData[L"score"] = json::value::number(score);  // スコアをJSONに追加
 
         http_client client(url);
         return client.request(methods::POST, L"", postData.serialize(), L"application/json");
         })
         .then([](http_response response) {
-            if (response.status_code() == status_codes::Created) {
+            if (response.status_code() == status_codes::Created || response.status_code() == status_codes::OK) {
                 return response.extract_json();
             }
+            return pplx::task_from_result(json::value());  // エラー時の空のJSONを返す
             })
             .then([](json::value json) {
-                return json[L"rowCount"].as_integer();
+                if (json.has_field(L"rowCount")) {
+                    return json[L"rowCount"].as_integer();  // 成功した場合の処理
+                }
+                return 0;  // 失敗した場合
                 });
 }
 
 // 新しいメソッドの実装: 全てのスコアを取得
 pplx::task<void> NetWork::GetAllScores(const std::wstring& url) {
     return pplx::create_task([=] {
-        // HTTPクライアントの作成とGETリクエストの送信
         http_client client(url);
         return client.request(methods::GET);
         })
         .then([](http_response response) {
-            // ステータスコードがOK（200）の場合、JSONを抽出
             if (response.status_code() == status_codes::OK) {
                 return response.extract_json();
             }
-            return pplx::task_from_result(json::value()); // エラー時の空のJSONを返す
+            return pplx::task_from_result(json::value());  // エラー時の空のJSONを返す
             })
             .then([](json::value jsonResponse) {
-                // JSONが配列形式か確認
                 if (jsonResponse.is_array()) {
                     std::vector<std::pair<std::wstring, int>> playerScores;
-
-                    // JSON配列をパースして、各プレイヤーの名前とスコアを取得
                     for (auto& player : jsonResponse.as_array()) {
                         std::wstring name = player[U("name")].as_string();
                         int score = player[U("score")].as_integer();
@@ -81,12 +82,11 @@ pplx::task<void> NetWork::GetAllScores(const std::wstring& url) {
                             return a.second > b.second;
                         });
 
-                    // ランキングを表示
-                    printf("Ranking:\n");
+                    // ランキング表示をDXLibで行う
                     for (size_t i = 0; i < playerScores.size(); ++i) {
-                        // wstringからC言語形式のワイド文字列に変換
+                        // wstringからC言語形式のワイド文字列に変換し、DXLibで描画
                         std::wstring name = playerScores[i].first;
-                        wprintf(L"%d. %ls : %d\n", (int)(i + 1), name.c_str(), playerScores[i].second);
+                        DrawFormatString(100, 50 + i * 20, GetColor(255, 255, 255), "%d. %ls : %d", (int)(i + 1), name.c_str(), playerScores[i].second);
                     }
                 }
                 else {
