@@ -57,6 +57,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Player* player = new Player(128, 0, mapChip);
 	int scene_ = Scene::Title;
 
+	int count = 0;
+	int countFalg = false;
+	
+	// パーティクルを管理するベクター
+	std::vector<Particle> particles;
+
 	// ゲームループで使う変数の宣言
 
 
@@ -66,6 +72,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	// 1ループ(フレーム)前のキーボード情報
 	char oldkeys[256] = { 0 };
 
+
+	bool siouflag = false;
 	// ゲームループ
 	while (true) {
 		// 最新のキーボード情報だったものは1フレーム前のキーボード情報として保存
@@ -83,6 +91,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (keys[KEY_INPUT_RETURN] == true && oldkeys[KEY_INPUT_RETURN] == false) {
 				scene_ = Game;
 			}
+
+			siouflag = false;
+			countFalg = false;
+			count = 0;
 			break;
 		case Game:
 			player->Update(WIN_HEIGHT);
@@ -90,7 +102,19 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			{
 				scene_ = Clear;
 			}
-			if (player->playerFlag == false) {
+			if (player->playerFlag == false && siouflag == false) {
+				auto newParticles = Particle::CreateParticles(player->x, player->y, 20);  // プレイヤーの足元に生成
+				particles.insert(particles.end(), newParticles.begin(), newParticles.end());
+				siouflag = true;
+				countFalg = true;
+			}
+
+			if (countFalg)
+			{
+				count++;
+			}
+			if (count >= 40)
+			{
 				scene_ = Over;
 			}
 			break;
@@ -98,7 +122,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			player->Reset();
 			mapChip->Reset();
 			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
-				scene_ = Game;
+				scene_ = Title;
 			}
 			break;
 
@@ -106,15 +130,29 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			player->Reset();
 			mapChip->Reset();
 			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
-				scene_ = Game;
+				scene_ = Title;
 			}
 			break;
 		}
+
+
+
 
 		// 描画処理
 		if (scene_ == Game) {
 			player->Draw();
 			mapChip->Draw(player->scrollY);
+			// パーティクルの更新と描画
+			for (auto& particle : particles) {
+				particle.Update();
+				particle.Draw();
+			}
+
+			// パーティクルの寿命が尽きたものを削除
+			particles.erase(
+				std::remove_if(particles.begin(), particles.end(), [](const Particle& p) { return !p.IsAlive(); }),
+				particles.end()
+			);
 			DrawFormatString(360, 48, GetColor(255, 255, 255), "%d", player->gualFlag);
 		}
 		else if (scene_ == Clear) {

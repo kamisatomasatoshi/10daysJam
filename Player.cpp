@@ -51,7 +51,7 @@ void Player::Draw() {
 	if (playerFlag == true) {
 		DrawGraph(x, y - scrollY, texture, TRUE);
 	}
-
+	
 	DrawFormatString(360, 0, GetColor(255, 255, 255), "重力%d", vy);
 	DrawFormatString(360, 16, GetColor(255, 255, 255), "Pフラグ%d", playerFlag);
 	DrawFormatString(360, 32, GetColor(255, 255, 255), "%d", y - scrollY);
@@ -105,6 +105,7 @@ void Player::Update(int win_hei) {
 	}
 	else {
 		if (vy > 20 && playerFlag == true) {
+			
 			playerFlag = false;
 		}
 		// 地面との衝突時に垂直速度をリセット
@@ -123,6 +124,8 @@ void Player::Update(int win_hei) {
 	if (isOnGaul) {
 		gualFlag = true;
 	}
+
+	
 }
 
 // 当たり判定をチェックする

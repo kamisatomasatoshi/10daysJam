@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include "MapChip.h"
-
+#include "Particle.h"
 class Player {
 public:
 	static const int PLAYER_SIZE = MapChip::CHIP_SIZE;  // プレイヤーのサイズ（32x32）
@@ -15,6 +15,8 @@ public:
 	bool playerFlag = true;
 	int scrollY = 0;
 
+	
+
 	Player(int startX, int startY, MapChip* map);  // コンストラクタ
 	~Player();  // デストラクタ
 
@@ -25,7 +27,7 @@ public:
 	// リセット関数
 	void Reset();
 
-private:
+	public :
 	int x, y;             // プレイヤーの位置
 	int vx, vy;           // プレイヤーの速度（vx: 水平速度, vy: 垂直速度）
 	int jumpsLeft;        // 残りジャンプ回数

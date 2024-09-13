@@ -2,7 +2,8 @@
 
 // コンストラクタ
 Particle::Particle(float x, float y, float velX, float velY, int life)
-    : posX(x), posY(y), velocityX(velX), velocityY(velY), life(life), currentLife(0) {
+    :posX(x), posY(y), velocityX(velX), velocityY(velY), life(life), currentLife(0) {
+
 }
 
 // パーティクルの更新処理
@@ -23,6 +24,9 @@ void Particle::Draw() const {
     if (IsAlive()) {
         // パーティクルの色やサイズなどは適宜調整
         DrawCircle(static_cast<int>(posX), static_cast<int>(posY), 2, GetColor(255, 255, 255), TRUE);
+         //DrawFormatString(0, 50, GetColor(255, 255, 0), "%d", posX);
+        
+    
     }
 }
 
@@ -38,7 +42,7 @@ std::vector<Particle> Particle::CreateParticles(float x, float y, int count) {
         // ランダムな方向に飛ぶパーティクルを作成
         float velX = (rand() % 100 - 50) / 100.0f;  // -0.5 から 0.5 の間の速度
         float velY = (rand() % 100 - 50) / 100.0f;  // -0.5 から 0.5 の間の速度
-        particles.push_back(Particle(x, y, velX, velY, 60));  // 寿命60フレーム
+        particles.push_back(Particle(x, y, velX, velY, 40));  // 寿命60フレーム
     }
     return particles;
 }

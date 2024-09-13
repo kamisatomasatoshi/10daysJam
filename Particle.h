@@ -24,8 +24,8 @@ public:
 private:
     float posX, posY;   // 位置
     float velocityX, velocityY; // 速度
-    int life;  // 寿命
-    int currentLife;  // 現在の経過時間
+    int life = 40;  // 寿命
+    int currentLife = 0;  // 現在の経過時間
 };
 
 #endif
