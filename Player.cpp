@@ -121,13 +121,6 @@ bool Player::CheckCollision(int nextX, int nextY) {
 // プレイヤーの下に地面があるかを確認する
 bool Player::IsOnGround() {
 
-	int left = x;
-	int right = x + PLAYER_SIZE - 1;
-	int bottom = y + PLAYER_SIZE;  // �v���C���[�̉�����1�s�N�Z�������`�F�b�N
-
-	// �����ƉE���̉��Ƀu���b�N������Βn�ʂɂ���Ɣ���
-	return map->IsHit(left, bottom) || map->IsHit(right, bottom);
-
     int left = x;
     int right = x + PLAYER_SIZE - 1;
     int bottom = y + PLAYER_SIZE;  // プレイヤーの下部の1ピクセル下をチェック
