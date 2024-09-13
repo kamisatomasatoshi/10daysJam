@@ -103,6 +103,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 		case Clear_:
 			player->Reset();
+			mapChip->Reset();
 			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
 				scene_ = Game_;
 			}
@@ -110,6 +111,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case Over_:
 			player->Reset();
+			mapChip->Reset();
 			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
 				scene_ = Game_;
 			}
@@ -124,9 +126,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 		else if (scene_ == Game_) {
 			mapChip->Draw(player->scrollY);
+
 			player->Draw();
 			DrawFormatString(128, 144, GetColor(255, 255, 255), "%d", player->gualFlag);
 			DrawFormatString(128, 128, GetColor(255, 255, 255), "%d", player->playerFlag);
+
+			DrawFormatString(360, 48, GetColor(255, 255, 255), "%d", player->gualFlag);
+
 		}
 		else if (scene_ == Clear_) {
 			DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームクリア");

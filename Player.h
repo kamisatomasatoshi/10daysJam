@@ -8,12 +8,12 @@ public:
 	static const int PLAYER_SIZE = MapChip::CHIP_SIZE;  // プレイヤーのサイズ（32x32）
 	static const int MOVE_SPEED = 4;                    // プレイヤーの移動速度
 	static const int JUMP_POWER = -15;                  // ジャンプ力
-	static const int MAX_FALL_SPEED = 10;               // 最大落下速度
+	static const int MAX_FALL_SPEED = 30;               // 最大落下速度
 	static const int MAX_JUMPS = 3;                     // 空中ジャンプの最大回数
 	static const int JUMP_COOLDOWN = 10;                // ジャンプクールタイムフレーム
-	int scrollY;
 	bool gualFlag = false;
 	bool playerFlag = true;
+	int scrollY = 0;
 
 	Player(int startX, int startY, MapChip* map);  // コンストラクタ
 	~Player();  // デストラクタ
