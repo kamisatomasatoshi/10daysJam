@@ -2,41 +2,45 @@
 #define PLAYER_H
 
 #include "MapChip.h"
-
+#include "Particle.h"
 class Player {
 public:
-	static const int PLAYER_SIZE = MapChip::CHIP_SIZE;  // ƒvƒŒƒCƒ„[‚ÌƒTƒCƒYi32x32j
-	static const int MOVE_SPEED = 4;                    // ƒvƒŒƒCƒ„[‚ÌˆÚ“®‘¬“x
-	static const int JUMP_POWER = -15;                  // ƒWƒƒƒ“ƒv—Í
-	static const int MAX_FALL_SPEED = 30;               // Å‘å—‰º‘¬“x
-	static const int MAX_JUMPS = 3;                     // ‹ó’†ƒWƒƒƒ“ƒv‚ÌÅ‘å‰ñ”
-	static const int JUMP_COOLDOWN = 10;                // ƒWƒƒƒ“ƒvƒN[ƒ‹ƒ^ƒCƒ€ƒtƒŒ[ƒ€
+	static const int PLAYER_SIZE = MapChip::CHIP_SIZE;  // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚µã‚¤ã‚ºï¼ˆ32x32ï¼‰
+	static const int MOVE_SPEED = 4;                    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•é€Ÿåº¦
+	static const int JUMP_POWER = -15;                  // ã‚¸ãƒ£ãƒ³ãƒ—åŠ›
+	static const int MAX_FALL_SPEED = 30;               // æœ€å¤§è½ä¸‹é€Ÿåº¦
+	static const int MAX_JUMPS = 3;                     // ç©ºä¸­ã‚¸ãƒ£ãƒ³ãƒ—ã®æœ€å¤§å›æ•°
+	static const int JUMP_COOLDOWN = 10;                // ã‚¸ãƒ£ãƒ³ãƒ—ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ ãƒ•ãƒ¬ãƒ¼ãƒ 
 	bool gualFlag = false;
 	bool playerFlag = true;
 	int scrollY = 0;
 
-	Player(int startX, int startY, MapChip* map);  // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	~Player();  // ƒfƒXƒgƒ‰ƒNƒ^
+	
 
-	// ƒvƒŒƒCƒ„[‚Ì•`‰æ
+	Player(int startX, int startY, MapChip* map);  // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	~Player();  // ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æç”»
 	void Draw();
-	// ƒvƒŒƒCƒ„[‚ÌXViˆÚ“®AƒWƒƒƒ“ƒvA—‰ºj
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ›´æ–°ï¼ˆç§»å‹•ã€ã‚¸ãƒ£ãƒ³ãƒ—ã€è½ä¸‹ï¼‰
 	void Update(int win_hei);
-	// ƒŠƒZƒbƒgŠÖ”
+	// ãƒªã‚»ãƒƒãƒˆé–¢æ•°
 	void Reset();
 
+
 private:
-	int x, y;           // ƒvƒŒƒCƒ„[‚ÌˆÊ’u
-	int vx, vy;         // ƒvƒŒƒCƒ„[‚Ì‘¬“xivx: …•½‘¬“x, vy: ‚’¼‘¬“xj
-	int jumpsLeft;      // c‚èƒWƒƒƒ“ƒv‰ñ”
-	int jumpCooldown;	// ƒWƒƒƒ“ƒvƒN[ƒ‹ƒ^ƒCƒ€
-	bool isOnGround;    // ƒvƒŒƒCƒ„[‚ª’n–Ê‚É‚¢‚é‚©‚Ç‚¤‚©
-	bool isOnGaul;		// ƒvƒŒƒCƒ„[‚ªƒS[ƒ‹‚É‚¢‚é‚©‚Ç‚¤‚©
-	//int texture;      // ƒvƒŒƒCƒ„[‚ÌƒeƒNƒXƒ`ƒƒ
-	int texture[6];		// ƒvƒŒƒCƒ„[‚ÌƒeƒNƒXƒ`ƒƒ
+	int x, y;           // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®
+	int vx, vy;         // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é€Ÿåº¦ï¼ˆvx: æ°´å¹³é€Ÿåº¦, vy: å‚ç›´é€Ÿåº¦ï¼‰
+	int jumpsLeft;      // æ®‹ã‚Šã‚¸ãƒ£ãƒ³ãƒ—å›æ•°
+	int jumpCooldown;	// ã‚¸ãƒ£ãƒ³ãƒ—ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ 
+	bool isOnGround;    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒåœ°é¢ã«ã„ã‚‹ã‹ã©ã†ã‹
+	bool isOnGaul;		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚´ãƒ¼ãƒ«ã«ã„ã‚‹ã‹ã©ã†ã‹
+	//int texture;      // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£
+	int texture[6];		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£
 	int animation;
-	int timer;		// ƒAƒjƒ[ƒVƒ‡ƒ“—pƒ^ƒCƒ}[
-	// ƒŠƒZƒbƒg—p•Ï”
+	int timer;		// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç”¨ã‚¿ã‚¤ãƒãƒ¼
+
+	// ãƒªã‚»ãƒƒãƒˆç”¨å¤‰æ•°
 	int Rx, Ry;
 	int Rvx, Rvy;
 	int RisJump, RjumpCoolDown;
@@ -44,21 +48,21 @@ private:
 	int Rmap;
 	int RscrollY;
 	int Rtimer;
-	// ˆÚ“®‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO( 0:’â~’†  1:ˆÚ“®’† )
+	// ç§»å‹•ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°( 0:åœæ­¢ä¸­  1:ç§»å‹•ä¸­ )
 	int Move = 0;
-	// ˆÚ“®‚µn‚ß‚Ä‚©‚ç‰½ƒtƒŒ[ƒ€Œo‰ß‚µ‚½‚©‚ğ•Û‚·‚é•Ï”
+	// ç§»å‹•ã—å§‹ã‚ã¦ã‹ã‚‰ä½•ãƒ•ãƒ¬ãƒ¼ãƒ çµŒéã—ãŸã‹ã‚’ä¿æŒã™ã‚‹å¤‰æ•°
 	int MoveCounter;
-	MapChip* map;         // ƒ}ƒbƒv‚Ö‚Ìƒ|ƒCƒ“ƒ^i“–‚½‚è”»’è‚Ég—pj
+	MapChip* map;         // ãƒãƒƒãƒ—ã¸ã®ãƒã‚¤ãƒ³ã‚¿ï¼ˆå½“ãŸã‚Šåˆ¤å®šã«ä½¿ç”¨ï¼‰
 
-	// “–‚½‚è”»’è‚ğƒ`ƒFƒbƒN‚·‚é
+	// å½“ãŸã‚Šåˆ¤å®šã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
 	bool CheckCollision(int nextX, int nextY);
-	// ƒvƒŒƒCƒ„[‚Ì‰º‚É’n–Ê‚ª‚ ‚é‚©‚ğŠm”F‚·‚é
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä¸‹ã«åœ°é¢ãŒã‚ã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
 	bool IsOnGround();
-	// ƒvƒŒƒCƒ„[‚Ì‰º‚É’n–Ê‚ª‚ ‚é‚©‚ğŠm”F‚·‚é
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä¸‹ã«åœ°é¢ãŒã‚ã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
 	bool IsOnGaul();
-	// ƒeƒNƒXƒ`ƒƒ‚ğ“Ç‚İ‚Ş
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’èª­ã¿è¾¼ã‚€
 	void LoadTexture();
-	// ƒeƒNƒXƒ`ƒƒ‚ğ‰ğ•ú‚·‚é
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’è§£æ”¾ã™ã‚‹
 	void UnloadTexture();
 };
 
