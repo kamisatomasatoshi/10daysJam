@@ -3,7 +3,9 @@
 
 // コンストラクタ
 Player::Player(int startX, int startY, MapChip* map)
-	:x(startX), y(startY), vx(0), vy(0), jumpsLeft(MAX_JUMPS), jumpCooldown(0), isOnGround(false), map(map), scrollY(0) {
+
+	:x(startX), y(startY), vx(0), vy(0), jumpsLeft(MAX_JUMPS), jumpCooldown(0), isOnGround(false), map(map), scrollY(0), timer(0) {
+
 	Rx = startX;
 	Ry = startY;
 	Rvx = vx;
@@ -12,6 +14,7 @@ Player::Player(int startX, int startY, MapChip* map)
 	RjumpCoolDown = jumpCooldown;
 	RisOnGround = isOnGround;
 	RscrollY = scrollY;
+	Rtimer = timer;
 
 	LoadTexture(); // プレイヤーのテクスチャを読み込む
 }
@@ -23,38 +26,52 @@ Player::~Player() {
 
 void Player::Reset() {
 	x = Rx, y = Ry,
-		vx = Rvx, vy = Rvy,
-		jumpsLeft = RisJump,
-		jumpCooldown = RjumpCoolDown,
-		isOnGround = RisOnGround,
-		scrollY = RscrollY;
+  
+		Rvx = vx, Rvy = vy,
+		RisJump = jumpsLeft,
+		RjumpCoolDown = jumpCooldown,
+		RisOnGround = isOnGround,
+		RscrollY = scrollY,
+		timer = Rtimer;
 	gualFlag = false;
 	playerFlag = true;
+
 }
 
 // テクスチャを読み込む
 void Player::LoadTexture() {
-	texture = LoadGraph("Resource/slime.png"); // プレイヤーのテクスチャ
+	//texture = LoadGraph("Resource/slime.png"); // プレイヤーのテクスチャ
 
-	if (texture == -1) {
-		printfDx("プレイヤーのテクスチャの読み込みに失敗しました。\n");
-	};
+	LoadDivGraph("Resource/slime.png", 6, 6, 1, 32, 32, texture);
+
+	for (int i = 0; i < 6; i++)
+	{
+		if (texture[i] == -1) {
+			printfDx("プレイヤーのテクスチャの読み込みに失敗しました。\n");
+		};
+	}
+
 }
 
 // テクスチャを解放する
 void Player::UnloadTexture() {
-	DeleteGraph(texture);
+	for (int i = 0; i < 6; i++)
+	{
+		DeleteGraph(texture[i]);
+	}
 }
 
 // プレイヤーの描画
 void Player::Draw() {
 	if (playerFlag == true) {
-		DrawGraph(x, y - scrollY, texture, TRUE);
+		DrawGraph(x, y - scrollY, texture[animation], TRUE);
 	}
 	
 	DrawFormatString(360, 0, GetColor(255, 255, 255), "重力%d", vy);
 	DrawFormatString(360, 16, GetColor(255, 255, 255), "Pフラグ%d", playerFlag);
 	DrawFormatString(360, 32, GetColor(255, 255, 255), "%d", y - scrollY);
+	DrawFormatString(360, 64, GetColor(255, 255, 255), "%d", timer);
+	DrawFormatString(360, 80, GetColor(255, 255, 255), "%d", animation);
 }
 
 // プレイヤーの更新（移動、ジャンプ、落下）
@@ -125,7 +142,11 @@ void Player::Update(int win_hei) {
 		gualFlag = true;
 	}
 
-	
+
+	timer = timer++;
+
+	animation = timer % 6;
+
 }
 
 // 当たり判定をチェックする
