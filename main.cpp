@@ -97,16 +97,17 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}
 			break;
 		case Clear:
+			player->Reset();
 			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
 				scene_ = Game;
 			}
 			break;
 
 		case Over:
+			player->Reset();
 			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
 				scene_ = Game;
 			}
-
 			break;
 		}
 

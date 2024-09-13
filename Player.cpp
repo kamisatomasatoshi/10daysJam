@@ -4,12 +4,31 @@
 // コンストラクタ
 Player::Player(int startX, int startY, MapChip* map)
 	:x(startX), y(startY), vx(0), vy(0), jumpsLeft(MAX_JUMPS), jumpCooldown(0), isOnGround(false), map(map), scrollY(0) {
+
+	Rx = startX;
+	Ry = startY;
+	Rvx = vx;
+	Rvy = vy;
+	RisJump = jumpsLeft;
+	RjumpCoolDown = jumpCooldown;
+	RisOnGround = isOnGround;
+	RscrollY = scrollY;
+
 	LoadTexture(); // プレイヤーのテクスチャを読み込む
 }
 
 // デストラクタ
 Player::~Player() {
 	UnloadTexture(); // プレイヤーのテクスチャを解放
+}
+
+void Player::Reset() {
+	x = Rx, y = Ry,
+		Rvx = vx, Rvy = vy,
+		RisJump = jumpsLeft,
+		RjumpCoolDown = jumpCooldown,
+		RisOnGround = isOnGround,
+		RscrollY = scrollY;
 }
 
 // テクスチャを読み込む

@@ -22,6 +22,8 @@ public:
 	void Draw();
 	// プレイヤーの更新（移動、ジャンプ、落下）
 	void Update(int win_hei);
+	// リセット関数
+	void Reset();
 
 private:
 	int x, y;             // プレイヤーの位置
@@ -31,6 +33,13 @@ private:
 	bool isOnGround;      // プレイヤーが地面にいるかどうか
 	bool isOnGaul;		  // プレイヤーがゴールにいるかどうか
 	int texture;          // プレイヤーのテクスチャ
+	// リセット用変数
+	int Rx, Ry;
+	int Rvx, Rvy;
+	int RisJump, RjumpCoolDown;
+	int RisOnGround;
+	int Rmap;
+	int RscrollY;
 	// 移動しているかどうかのフラグ( 0:停止中  1:移動中 )
 	int Move = 0;
 	// 移動し始めてから何フレーム経過したかを保持する変数

@@ -30,8 +30,8 @@ public:
 };
 
 //main.cppの使い方
-NetWork network;
-const std::wstring url = L"http://example.com/api/get_all_scores"; // サーバーのAPI URL
+//NetWork network;
+//const std::wstring url = L"http://example.com/api/get_all_scores"; // サーバーのAPI URL
 
 //try {
 //    network.GetAllScores(url).wait();
