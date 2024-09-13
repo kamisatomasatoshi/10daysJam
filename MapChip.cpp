@@ -51,7 +51,7 @@ void MapChip::Draw(int ScrollY) {
 		return;
 	}
 
-	int j, i;
+	int j = 0, i = 0;
 
 	// 描画するマップチップの数をセット
 	DrawMapChipNumX = 100;

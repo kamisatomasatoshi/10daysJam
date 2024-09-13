@@ -72,7 +72,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int scene_ = Scene::Title_;
 
 
-	int texture_background = LoadGraph("Resource/title.png");
+	int texture_title = LoadGraph("Resource/title.png");
+	int texture_background = LoadGraph("Resource/darkcave.png");
+	int texture_clear = LoadGraph("Resource/clear.png");
+	int texture_over = LoadGraph("Resource/over.png");
 
 	// ゲームループで使う変数の宣言
 
@@ -99,7 +102,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 		case Title_:
 			//title->Update();
-			if (keys[KEY_INPUT_RETURN] == true && oldkeys[KEY_INPUT_RETURN] == false) {
+			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
 				scene_ = Game_;
 			}
 
@@ -156,10 +159,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		// 描画処理
 		if (scene_ == Title_)
 		{
-			DrawGraph(0, 0, texture_background, TRUE);
+			DrawGraph(0, 0, texture_title , TRUE);
 			//title->Draw();
 		}
 		else if (scene_ == Game_) {
+			DrawGraph(0, 0, texture_background, TRUE);
 			mapChip->Draw(player->scrollY);
 			player->Draw();
 
@@ -180,9 +184,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		}
 		else if (scene_ == Clear_) {
+			DrawGraph(0, 0, texture_clear, TRUE);
 			//DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームクリア");
 		}
 		else if (scene_ == Over_) {
+			DrawGraph(0, 0, texture_over, TRUE);
 			//DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームオーバー");
 		}
 
