@@ -67,11 +67,11 @@ void Player::Draw() {
 		DrawGraph(x, y - scrollY, texture[animation], TRUE);
 	}
 	
-	DrawFormatString(360, 0, GetColor(255, 255, 255), "重力%d", vy);
+	/*DrawFormatString(360, 0, GetColor(255, 255, 255), "重力%d", vy);
 	DrawFormatString(360, 16, GetColor(255, 255, 255), "Pフラグ%d", playerFlag);
 	DrawFormatString(360, 32, GetColor(255, 255, 255), "%d", y - scrollY);
 	DrawFormatString(360, 64, GetColor(255, 255, 255), "%d", timer);
-	DrawFormatString(360, 80, GetColor(255, 255, 255), "%d", animation);
+	DrawFormatString(360, 80, GetColor(255, 255, 255), "%d", animation);*/
 }
 
 // プレイヤーの更新（移動、ジャンプ、落下）

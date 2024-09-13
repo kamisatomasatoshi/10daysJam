@@ -180,13 +180,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		}
 		else if (scene_ == Clear_) {
-			DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームクリア");
+			//DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームクリア");
 		}
 		else if (scene_ == Over_) {
-			DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームオーバー");
+			//DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームオーバー");
 		}
 
-		DrawFormatString(0, 0, GetColor(255, 255, 255), "SceneNo%d", scene_);
+		//DrawFormatString(0, 0, GetColor(255, 255, 255), "SceneNo%d", scene_);
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
 		ScreenFlip();

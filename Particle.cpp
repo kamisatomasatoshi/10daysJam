@@ -23,7 +23,7 @@ void Particle::Update() {
 void Particle::Draw() const {
     if (IsAlive()) {
         // パーティクルの色やサイズなどは適宜調整
-        DrawCircle(static_cast<int>(posX), static_cast<int>(posY), 2, GetColor(255, 255, 255), TRUE);
+        DrawCircle(static_cast<int>(posX), static_cast<int>(posY), 2, GetColor(255, 0, 0), TRUE);
          //DrawFormatString(0, 50, GetColor(255, 255, 0), "%d", posX);
         
     
