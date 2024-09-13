@@ -19,7 +19,7 @@ public:
 	// Žw’èˆÊ’u‚Ì“–‚½‚è”»’è
 	bool IsHit(int x, int y);
 	bool IsGual(int x, int y);
-
+	void Reset();
 	int GetMapNo() { return MapNo; }
 	void SetMapNo(int MapNo_);
 

@@ -111,3 +111,11 @@ bool MapChip::IsGual(int x, int y) {
 	// マップデータが2なら当たり判定
 	return MapData[MapNo].Data[mapY][mapX] == 2;
 }
+
+void MapChip::Reset()
+{
+	// 描画用の初期値設定
+	MapDrawPointX = 0;
+	MapDrawPointY = 0;
+
+}
