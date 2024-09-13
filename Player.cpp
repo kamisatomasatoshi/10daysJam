@@ -4,7 +4,6 @@
 // コンストラクタ
 Player::Player(int startX, int startY, MapChip* map)
 	:x(startX), y(startY), vx(0), vy(0), jumpsLeft(MAX_JUMPS), jumpCooldown(0), isOnGround(false), map(map), scrollY(0) {
-
 	Rx = startX;
 	Ry = startY;
 	Rvx = vx;
@@ -24,11 +23,13 @@ Player::~Player() {
 
 void Player::Reset() {
 	x = Rx, y = Ry,
-		Rvx = vx, Rvy = vy,
-		RisJump = jumpsLeft,
-		RjumpCoolDown = jumpCooldown,
-		RisOnGround = isOnGround,
-		RscrollY = scrollY;
+		vx = Rvx, vy = Rvy,
+		jumpsLeft = RisJump,
+		jumpCooldown = RjumpCoolDown,
+		isOnGround = RisOnGround,
+		scrollY = RscrollY;
+	gualFlag = false;
+	playerFlag = true;
 }
 
 // テクスチャを読み込む
@@ -38,7 +39,6 @@ void Player::LoadTexture() {
 	if (texture == -1) {
 		printfDx("プレイヤーのテクスチャの読み込みに失敗しました。\n");
 	};
-
 }
 
 // テクスチャを解放する
@@ -53,7 +53,7 @@ void Player::Draw() {
 	}
 
 	DrawFormatString(360, 0, GetColor(255, 255, 255), "重力%d", vy);
-	DrawFormatString(360, 16, GetColor(255, 255, 255), "フラグ%d", playerFlag);
+	DrawFormatString(360, 16, GetColor(255, 255, 255), "Pフラグ%d", playerFlag);
 	DrawFormatString(360, 32, GetColor(255, 255, 255), "%d", y - scrollY);
 }
 
@@ -104,6 +104,9 @@ void Player::Update(int win_hei) {
 		y = nextY;
 	}
 	else {
+		if (vy > 20 && playerFlag == true) {
+			playerFlag = false;
+		}
 		// 地面との衝突時に垂直速度をリセット
 		if (vy > 0) {
 			vy = 0;
@@ -141,8 +144,6 @@ bool Player::CheckCollision(int nextX, int nextY) {
 
 // プレイヤーの下に地面があるかを確認する
 bool Player::IsOnGround() {
-
-
 	int left = x;
 	int right = x + PLAYER_SIZE - 1;
 	int bottom = y + PLAYER_SIZE;  // プレイヤーの下部の1ピクセル下をチェック
@@ -153,8 +154,6 @@ bool Player::IsOnGround() {
 
 // プレイヤーの下に地面があるかを確認する
 bool Player::IsOnGaul() {
-
-
 	int left = x;
 	int right = x + PLAYER_SIZE - 1;
 	int bottom = y + PLAYER_SIZE;  // プレイヤーの下部の1ピクセル下をチェック

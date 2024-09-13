@@ -14,12 +14,10 @@ const int WIN_HEIGHT = 640;
 
 enum Scene
 {
-
 	Title,	// タイトル
 	Game,	// ステージ
 	Clear,	// クリア
 	Over,	// オーバー
-
 };
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
@@ -98,6 +96,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 		case Clear:
 			player->Reset();
+			mapChip->Reset();
 			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
 				scene_ = Game;
 			}
@@ -105,6 +104,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case Over:
 			player->Reset();
+			mapChip->Reset();
 			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
 				scene_ = Game;
 			}
@@ -115,8 +115,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		if (scene_ == Game) {
 			player->Draw();
 			mapChip->Draw(player->scrollY);
-			DrawFormatString(128, 144, GetColor(255, 255, 255), "%d", player->gualFlag);
-			DrawFormatString(128, 128, GetColor(255, 255, 255), "%d", player->playerFlag);
+			DrawFormatString(360, 48, GetColor(255, 255, 255), "%d", player->gualFlag);
 		}
 		else if (scene_ == Clear) {
 			DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームクリア");
