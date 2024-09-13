@@ -127,7 +127,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}
 			if (count >= 40)
 			{
-				scene_ = Over;			
+				scene_ = Over_;			
 			}
 			break;
 		case Clear_:
@@ -135,7 +135,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			mapChip->Reset();
 			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
 
-				scene_ = Title;
+				scene_ = Title_;
 
 
 			}
@@ -145,7 +145,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			player->Reset();
 			mapChip->Reset();
 			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
-				scene_ = Title;
+				scene_ = Title_;
 			}
 			break;
 		}

@@ -28,7 +28,7 @@ public:
 	void Reset();
 
 
-private:
+
 	int x, y;           // プレイヤーの位置
 	int vx, vy;         // プレイヤーの速度（vx: 水平速度, vy: 垂直速度）
 	int jumpsLeft;      // 残りジャンプ回数
