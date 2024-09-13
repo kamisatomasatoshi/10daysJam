@@ -26,13 +26,16 @@ public:
 	void Reset();
 
 private:
-	int x, y;             // プレイヤーの位置
-	int vx, vy;           // プレイヤーの速度（vx: 水平速度, vy: 垂直速度）
-	int jumpsLeft;        // 残りジャンプ回数
-	int jumpCooldown;     // ジャンプクールタイム
-	bool isOnGround;      // プレイヤーが地面にいるかどうか
-	bool isOnGaul;		  // プレイヤーがゴールにいるかどうか
-	int texture;          // プレイヤーのテクスチャ
+	int x, y;           // プレイヤーの位置
+	int vx, vy;         // プレイヤーの速度（vx: 水平速度, vy: 垂直速度）
+	int jumpsLeft;      // 残りジャンプ回数
+	int jumpCooldown;	// ジャンプクールタイム
+	bool isOnGround;    // プレイヤーが地面にいるかどうか
+	bool isOnGaul;		// プレイヤーがゴールにいるかどうか
+	//int texture;      // プレイヤーのテクスチャ
+	int texture[6];		// プレイヤーのテクスチャ
+	int animation;
+	int timer;		// アニメーション用タイマー
 	// リセット用変数
 	int Rx, Ry;
 	int Rvx, Rvy;
@@ -40,6 +43,7 @@ private:
 	int RisOnGround;
 	int Rmap;
 	int RscrollY;
+	int Rtimer;
 	// 移動しているかどうかのフラグ( 0:停止中  1:移動中 )
 	int Move = 0;
 	// 移動し始めてから何フレーム経過したかを保持する変数

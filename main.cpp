@@ -1,7 +1,8 @@
 ﻿#include "DxLib.h"
 #include "MapChip.h"
 #include "Player.h"
-#include "NetWork.h"
+#include "Title.h"
+//#include "NetWork.h"
 
 // ウィンドウのタイトルに表示する文字列
 const TCHAR TITLE[] = "落ちるんデス";
@@ -15,10 +16,10 @@ const int WIN_HEIGHT = 640;
 enum Scene
 {
 
-	Title,	// タイトル
-	Game,	// ステージ
-	Clear,	// クリア
-	Over,	// オーバー
+	Title_,	// タイトル
+	Game_,	// ステージ
+	Clear_,	// クリア
+	Over_,	// オーバー
 
 };
 
@@ -57,10 +58,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	// 画像などのリソースデータの変数宣言と読み込み
 	MapChip* mapChip = new MapChip();
 	Player* player = new Player(128, 0, mapChip);
-	int scene_ = Scene::Title;
+	Title* title = new Title();
+
+	int scene_ = Scene::Title_;
+
+	int texture_background = LoadGraph("Resource/title.png");
 
 	// ゲームループで使う変数の宣言
-
 
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
@@ -81,47 +85,53 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		// 更新処理
 		switch (scene_)
 		{
-		case Title:
+		case Title_:
+			//title->Update();
 			if (keys[KEY_INPUT_RETURN] == true && oldkeys[KEY_INPUT_RETURN] == false) {
-				scene_ = Game;
+				scene_ = Game_;
 			}
 			break;
-		case Game:
+		case Game_:
 			player->Update(WIN_HEIGHT);
 			if (player->gualFlag == true)
 			{
-				scene_ = Clear;
+				scene_ = Clear_;
 			}
 			if (player->playerFlag == false) {
-				scene_ = Over;
+				scene_ = Over_;
 			}
 			break;
-		case Clear:
+		case Clear_:
 			player->Reset();
 			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
-				scene_ = Game;
+				scene_ = Game_;
 			}
 			break;
 
-		case Over:
+		case Over_:
 			player->Reset();
 			if (keys[KEY_INPUT_SPACE] == true && oldkeys[KEY_INPUT_SPACE] == false) {
-				scene_ = Game;
+				scene_ = Game_;
 			}
 			break;
 		}
 
 		// 描画処理
-		if (scene_ == Game) {
-			player->Draw();
+		if (scene_ == Title_)
+		{
+			DrawGraph(0, 0, texture_background, TRUE);
+			//title->Draw();
+		}
+		else if (scene_ == Game_) {
 			mapChip->Draw(player->scrollY);
+			player->Draw();
 			DrawFormatString(128, 144, GetColor(255, 255, 255), "%d", player->gualFlag);
 			DrawFormatString(128, 128, GetColor(255, 255, 255), "%d", player->playerFlag);
 		}
-		else if (scene_ == Clear) {
+		else if (scene_ == Clear_) {
 			DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームクリア");
 		}
-		else if (scene_ == Over) {
+		else if (scene_ == Over_) {
 			DrawFormatString(0, 0, GetColor(255, 255, 255), "ゲームオーバー");
 		}
 
