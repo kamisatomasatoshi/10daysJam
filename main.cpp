@@ -161,6 +161,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 		else if (scene_ == Game_) {
 			mapChip->Draw(player->scrollY);
+			player->Draw();
 
 			// パーティクルの更新と描画
 			for (auto& particle : particles) {
@@ -175,10 +176,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			);
 
 
-			player->Draw();
-			DrawFormatString(128, 144, GetColor(255, 255, 255), "%d", player->gualFlag);
-			DrawFormatString(128, 128, GetColor(255, 255, 255), "%d", player->playerFlag);
-			DrawFormatString(360, 48, GetColor(255, 255, 255), "%d", player->gualFlag);
+			
 
 		}
 		else if (scene_ == Clear_) {
